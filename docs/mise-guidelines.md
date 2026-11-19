@@ -26,11 +26,11 @@ This repo's `[tools]` pins exactly the tools its own tasks and hooks call.
 ## File layout
 
 ```text
-tasks/<category>/<tool>-tasks.toml   # e.g. tasks/toml/taplo-tasks.toml, tasks/py/ruff-tasks.toml
+tasks/<category>/<tool>.tasks.toml   # e.g. tasks/toml/taplo.tasks.toml, tasks/py/ruff.tasks.toml
 ```
 
 - One file per tool, grouped by category folder (`core`, `toml`, `release`, `py`, ...).
-- Always use the `-tasks.toml` suffix. A bare `<tool>.toml` collides with config files tools auto-discover: mise ignores `mise.toml`, prek parses `prek.toml` as a hook config, ruff and uv read `ruff.toml` and `uv.toml`.
+- Always use the `.tasks.toml` suffix. A bare `<tool>.toml` collides with config files tools auto-discover: mise ignores `mise.toml`, prek parses `prek.toml` as a hook config, ruff and uv read `ruff.toml` and `uv.toml`.
 - Folders organise files only; they do not prefix task names.
 
 ## Task definitions
@@ -48,7 +48,7 @@ Consumers list `git::` URLs in `task_config.includes`, pinned with `?ref=<tag>` 
 | --- | --- |
 | `//tasks` | every task |
 | `//tasks/py` | one category |
-| `//tasks/py/ruff-tasks.toml` | one tool (the `.toml` extension is required) |
+| `//tasks/py/ruff.tasks.toml` | one tool (the `.toml` extension is required) |
 
 Globs work only for local paths. An unresolvable entry makes every mise command in the consumer fail, so check `mise tasks ls` after editing includes.
 

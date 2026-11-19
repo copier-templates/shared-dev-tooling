@@ -18,7 +18,7 @@ This repo ships workflows only: task definitions and hook definitions. It never 
 
 ```text
 .pre-commit-hooks.yaml               # prek hook manifest
-tasks/<category>/<tool>-tasks.toml   # shared mise tasks, named <tool>:<verb>
+tasks/<category>/<tool>.tasks.toml   # shared mise tasks, named <tool>:<verb>
 docs/                                # contributor guidelines
 ```
 
@@ -64,7 +64,7 @@ hooks = [
 
 Notes:
 
-- Include granularity: `//tasks` (everything), `//tasks/<category>` (one category), or `//tasks/<category>/<tool>-tasks.toml` (one tool; the `.toml` extension is required). Globs only work for local paths.
+- Include granularity: `//tasks` (everything), `//tasks/<category>` (one category), or `//tasks/<category>/<tool>.tasks.toml` (one tool; the `.toml` extension is required). Globs only work for local paths.
 - Shared tasks do not declare tool versions. If a task fails with `command not found`, add the tool with `mise use <tool>@<version>`. Upgrade all tools at once with `mise run mise:bump` (within ranges) or `mise upgrade --bump` (raises ranges).
 - Without `?ref=` the default branch is used from cache. Run `mise run mise:cache:clear` to refetch it.
 - To override a shared task, list a local directory after the remote entry.

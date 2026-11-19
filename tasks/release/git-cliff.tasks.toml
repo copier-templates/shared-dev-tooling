@@ -1,4 +1,4 @@
-["git-cliff:changelog"]
+["changelog:generate"]
 description = "Generate CHANGELOG.md for the project"
 tags = [
   "release",
