@@ -8,13 +8,19 @@ minimum_prek_version = "0.5.0"
 # checks, the commit-msg conventional-commit check, and the pre-push
 # version-tag gate. Without this, `prek install` only installs the pre-commit
 # shim and stage-specific hooks never fire.
-default_install_hook_types = ["pre-commit", "commit-msg", "pre-push"]
+default_install_hook_types = [
+  "commit-msg",
+  "pre-commit",
+  "pre-push",
+]
 
 # Hooks without an explicit `stages` list run on every installed shim
 # (pre-commit *and* commit-msg on every commit, plus pre-push on every push).
 # Pin the default to pre-commit so each hook runs once; stage-specific hooks
 # (conventional-pre-commit, check-version-tag) declare their own stages.
-default_stages = ["pre-commit"]
+default_stages = [
+  "pre-commit",
+]
 
 # Hold new hook revs back for a week so `prek update` never adopts a freshly published tag.
 [update]
@@ -61,7 +67,9 @@ hooks = [
 [[repos]]
 repo = "https://github.com/gitleaks/gitleaks"
 rev = "v8.30.1"
-hooks = [{ id = "gitleaks", priority = "checks" }]
+hooks = [
+  { id = "gitleaks", priority = "checks" },
+]
 
 [[repos]]
 repo = "https://github.com/compilerla/conventional-pre-commit"
@@ -72,4 +80,15 @@ hooks = [
   ], args = [
     "--verbose",
   ] },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "taplo-fmt", name = "taplo fmt", entry = "mise exec taplo -- taplo fmt", language = "system", types = [
+    "toml",
+  ], priority = "fix-toml" },
+  { id = "taplo-lint", name = "taplo lint", entry = "mise exec taplo -- taplo lint", language = "system", types = [
+    "toml",
+  ], priority = "checks" },
 ]
