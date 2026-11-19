@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/j178/prek/main/prek-hooks.schema.json
 # Hooks are thin wrappers around the shared mise tasks in tasks/. Consumers must
 # include those tasks via task_config.includes and pin the tools in [tools].
-# See docs/prek-guidelines.md.
+# See docs/guidelines/prek.md.
 
 - id: mise-lock-check
   name: mise lock --check

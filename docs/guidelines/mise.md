@@ -52,6 +52,17 @@ Consumers list `git::` URLs in `task_config.includes`, pinned with `?ref=<tag>` 
 
 Globs work only for local paths. An unresolvable entry makes every mise command in the consumer fail, so check `mise tasks ls` after editing includes.
 
+## File tasks
+
+Scripts under `tasks/` that mise runs as file tasks (for example `tasks/release/cut.sh`). Shell rules: [shell guidelines](shell.md).
+
+- Place scripts directly in `tasks/<category>/` and name each after its action: `tasks/release/cut.sh` is `release:cut`. The path sets the task name, so do not set `#MISE alias`.
+- Put task metadata in `#MISE` lines right after the shebang: `description`, `tags` (see [task definitions](#task-definitions)), and `interactive=true` when the script prompts.
+- Declare every option with `#USAGE flag` and give it a short and a long name: `#USAGE flag "-u --allow-unsynced" help="..."`.
+- mise exports the long name as an environment variable with dashes replaced by underscores: `--allow-unsynced` is read as `usage_allow_unsynced`.
+- Read that variable once at the top into a lowercase variable, with a default: `allow_unsynced=${usage_allow_unsynced:-false}`. Reference the lowercase variable everywhere else.
+- Add `# shellcheck disable=SC2154` with a reason on that line, because shellcheck cannot see mise's variables.
+
 ## Validation
 
 Every change passes `mise tasks validate` and `prek run --all-files`.
