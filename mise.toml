@@ -1,3 +1,13 @@
+min_version = "2026.11.10"
+
+[settings]
+experimental = true
+lockfile = true
+minimum_release_age = "7d"
+
+[tool_config]
+locked = true
+
 [tools]
 git-cliff = "2.14"
 
