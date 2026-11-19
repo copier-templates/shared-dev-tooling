@@ -86,6 +86,7 @@ hooks = [
 repo = "local"
 hooks = [
   { id = "mise-lock-check", name = "mise lock --check", entry = "mise lock --check", language = "system", pass_filenames = false, files = "^(mise\\.toml|mise\\.lock|tasks/.*\\.toml)$", priority = "checks" },
+  { id = "mise-tasks-validate", name = "mise tasks validate", entry = "mise tasks validate", language = "system", pass_filenames = false, files = "^(mise\\.toml|tasks/.*\\.toml)$", priority = "checks" },
   { id = "taplo-fmt", name = "taplo fmt", entry = "mise exec -- taplo fmt", language = "system", types = [
     "toml",
   ], priority = "fix-toml" },
