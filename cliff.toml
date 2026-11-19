@@ -60,11 +60,10 @@ protect_breaking_commits = false
 # Optionally sets the commit's scope and can decide to exclude commits from further processing.
 commit_parsers = [
   { body = ".*security", group = "<!-- 8 -->🛡️ Security" },
-  { message = ".*", group = "<!-- 10 -->💼 Other" },
   { message = "^chore\\(deps.*\\)", skip = true },
   { message = "^chore\\(pr\\)", skip = true },
   { message = "^chore\\(pull\\)", skip = true },
-  { message = "^chore\\(release\\): prepare for", skip = true },
+  { message = "^chore\\(release\\): bump version", skip = true },
   { message = "^chore|^ci", group = "<!-- 7 -->⚙️ Miscellaneous Tasks" },
   { message = "^doc", group = "<!-- 3 -->📚 Documentation" },
   { message = "^feat", group = "<!-- 0 -->🚀 Features" },
@@ -74,6 +73,7 @@ commit_parsers = [
   { message = "^revert", group = "<!-- 9 -->◀️ Revert" },
   { message = "^style", group = "<!-- 5 -->🎨 Styling" },
   { message = "^test", group = "<!-- 6 -->🧪 Testing" },
+  { message = ".*", group = "<!-- 10 -->💼 Other" },
 ]
 # Exclude commits that are not matched by any commit parser.
 filter_commits = false
