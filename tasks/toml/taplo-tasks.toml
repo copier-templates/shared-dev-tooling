@@ -1,7 +1,13 @@
 ["taplo:lint"]
 description = "Lint TOML documents with taplo"
+tags = [
+  "lint",
+]
 run = "taplo lint"
 
 ["taplo:fmt"]
 description = "Format TOML documents in place with taplo"
+tags = [
+  "fmt",
+]
 run = "taplo fmt"

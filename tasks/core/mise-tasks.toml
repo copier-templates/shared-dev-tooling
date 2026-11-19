@@ -1,17 +1,36 @@
 ["mise:doctor"]
 description = "Diagnose the mise installation and configuration"
+tags = [
+  "maintenance",
+]
 run = "mise doctor"
 
 ["mise:lock"]
 description = "Refresh mise.lock for all configured tools and task tools"
+tags = [
+  "maintenance",
+]
 run = "mise lock"
 
 ["mise:lock:check"]
 description = "Verify mise.lock is up to date without changing it"
+tags = [
+  "lint",
+]
 run = "mise lock --check"
+
+["mise:tasks:validate"]
+description = "Validate all mise task definitions"
+tags = [
+  "lint",
+]
+run = "mise tasks validate"
 
 ["mise:install"]
 description = "Install all tools pinned in mise.toml and mise.lock"
+tags = [
+  "setup",
+]
 depends = [
   "mise:lock:check",
 ]
@@ -19,10 +38,16 @@ run = "mise install"
 
 ["mise:outdated"]
 description = "List tools with newer versions than the locked ones"
+tags = [
+  "maintenance",
+]
 run = "mise outdated"
 
 ["mise:bump"]
 description = "Re-resolve tool requests to latest versions and refresh mise.lock"
+tags = [
+  "maintenance",
+]
 run = "mise lock --bump"
 depends_post = [
   "mise:install",
@@ -30,4 +55,7 @@ depends_post = [
 
 ["mise:cache:clear"]
 description = "Clear mise cache so remote git:: includes are refetched"
+tags = [
+  "maintenance",
+]
 run = "mise cache clear"
