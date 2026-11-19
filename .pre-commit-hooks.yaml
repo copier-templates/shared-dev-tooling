@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/j178/prek/main/prek-hooks.schema.json
+# Hooks are thin wrappers around the shared mise tasks in tasks/. Consumers must
+# include those tasks via task_config.includes and pin the tools in [tools].
+# See docs/prek-guidelines.md.
+
+- id: mise-lock-check
+  name: mise lock --check
+  description: Verify mise.lock is up to date (runs mise:lock:check)
+  entry: mise run mise:lock:check
+  language: system
+  pass_filenames: false
+  files: (^|/)mise(\..+)?\.(toml|lock)$|^tasks/.*\.toml$
+
+- id: mise-tasks-validate
+  name: mise tasks validate
+  description: Validate mise task definitions (runs mise:tasks:validate)
+  entry: mise run mise:tasks:validate
+  language: system
+  pass_filenames: false
+  files: (^|/)mise(\..+)?\.toml$|^tasks/.*\.toml$
+
+- id: taplo-fmt
+  name: taplo fmt
+  description: Format TOML files in place (runs taplo:fmt)
+  entry: mise run taplo:fmt
+  language: system
+  types: [toml]
+
+- id: taplo-lint
+  name: taplo lint
+  description: Lint TOML files (runs taplo:lint)
+  entry: mise run taplo:lint
+  language: system
+  types: [toml]
