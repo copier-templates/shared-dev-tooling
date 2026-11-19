@@ -41,7 +41,7 @@ description = "List tools with newer versions than the locked ones"
 tags = [
   "maintenance",
 ]
-run = "mise outdated"
+run = "mise outdated --no-global"
 
 ["mise:bump"]
 description = "Re-resolve tool requests to latest versions and refresh mise.lock"
