@@ -2,36 +2,69 @@
 
 [![mise](https://img.shields.io/badge/mise-enabled-purple)](https://mise.jdx.dev/)
 [![prek](https://raw.githubusercontent.com/j178/prek/main/docs/assets/badge.svg)](https://github.com/j178/prek)
-[![License](https://img.shields.io/github/license/copier-templates/mise-tasks)](LICENSE)
+[![License](https://img.shields.io/github/license/copier-templates/shared-dev-tooling)](LICENSE)
 
 </div>
 
-# Shared Mise Tasks
+# Shared Dev Tooling
 
-This repository contains shared tasks for the Mise task runner, which can be reused across different projects.
+Shared [mise](https://mise.jdx.dev/) tasks and [prek](https://prek.j178.dev) hooks, reusable across projects. mise installs every tool; prek hooks are thin wrappers that call the mise tasks (`mise run <task>`), so hooks, CI, and manual runs behave the same. Tasks and hooks are released together under one semver tag.
 
 ## Scope
 
-Shared tasks define workflows only — commands, scripts, and tool dependencies.
-They never ship project configuration (e.g. `prek.toml`, linter/formatter configs), because configuration varies per target project and tech stack. Each target project must maintain its own config files.
+This repo ships workflows only: task definitions and hook definitions. It never ships project configuration (`prek.toml`, `.taplo.toml`, `cliff.toml`, linter configs) or tool versions. Each consumer owns those. This repo's own config files are a reference.
 
-For example, `tasks/hooks-prek.toml` provides `hooks:*` workflows, but does not provide `prek.toml`. See this repo's `prek.toml` as a starter reference for your own project.
+## Layout
+
+```text
+.pre-commit-hooks.yaml               # prek hook manifest
+tasks/<category>/<tool>-tasks.toml   # shared mise tasks, named <tool>:<verb>
+docs/                                # contributor guidelines
+```
 
 ## Usage
 
-Include shared tasks via `task_config.includes` with a `git::` URL. See [mise docs](https://mise.jdx.dev/tasks/task-discovery.html#remote-git-includes).
+Use the same tag for the mise `ref` and the prek `rev`.
 
 In your `mise.toml`:
 
 ```toml
+min_version = "2026.11.10"
+
+[settings]
+experimental = true # required for git:: task includes
+lockfile = true
+minimum_release_age = "7d"
+
 [task_config]
 includes = [
-  "git::https://github.com/copier-templates/mise-tasks.git//tasks?ref=0.1.0",
+  "git::https://github.com/copier-templates/shared-dev-tooling.git//tasks?ref=<tag>",
+]
+
+[tools]
+# pin every tool the included tasks call, e.g.
+"cargo:taplo-cli" = "0.10"
+```
+
+In your `prek.toml`:
+
+```toml
+[[repos]]
+repo = "https://github.com/copier-templates/shared-dev-tooling"
+rev = "<tag>"
+hooks = [
+  { id = "mise-lock-check" },
+  { id = "taplo-lint" },
 ]
 ```
 
 Notes:
 
-- `//tasks` loads all task files in `tasks/`; use `//tasks/<filename>.toml` to load a single file.
-- Pin `?ref=<tag>` for reproducibility. Without it the default branch is used from cache — run `mise cache clear` or set `task.remote_no_cache` to refresh.
+- Include granularity: `//tasks` (everything), `//tasks/<category>` (one category), or `//tasks/<category>/<tool>-tasks.toml` (one tool; the `.toml` extension is required). Globs only work for local paths.
+- Shared tasks do not declare tool versions. If a task fails with `command not found`, add the tool with `mise use <tool>@<version>`. Upgrade all tools at once with `mise run mise:bump` (within ranges) or `mise upgrade --bump` (raises ranges).
+- Without `?ref=` the default branch is used from cache. Run `mise run mise:cache:clear` to refetch it.
 - To override a shared task, list a local directory after the remote entry.
+
+## Contributing
+
+Follow [docs/mise-guidelines.md](docs/mise-guidelines.md) for tasks and [docs/prek-guidelines.md](docs/prek-guidelines.md) for hooks.
