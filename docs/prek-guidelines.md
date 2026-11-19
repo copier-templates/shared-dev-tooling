@@ -14,11 +14,13 @@ Rules for the published hook manifest `.pre-commit-hooks.yaml` and this repo's o
 
 ## This repo's `prek.toml`
 
-Every manifest hook is mirrored as a `repo = "local"` hook with the same `id` and `entry`, so this repo runs its own hooks. Project-specific fields (`priority`, `stages`) live only there.
+Every manifest hook is mirrored as a `repo = "local"` hook with the same `id`, `entry`, `language` and filters, so this repo runs its own hooks. Project-specific fields (`priority`, `stages`) live only there.
+
+Why a mirror: prek's only special `repo` values are `local`, `meta` and `builtin`; any other `repo` is cloned at a fixed `rev`, so a repo cannot run its own working-tree manifest. Pointing at the GitHub URL tests the last published tag, not the change under review. When editing a hook, change the manifest and its mirror together and verify the manifest with `prek try-repo` (below).
 
 ## Consumers
 
-Consumers reference the repo in their `prek.toml` with `rev` set to the same tag as the mise include `ref`, and must also include the tasks the hooks call.
+The manifest is the reuse mechanism: consumers reference this repo in their `prek.toml` with `rev` set to the same tag as the mise include `ref` and list hooks by `id`. A hook works in a consumer only when the task it runs is included and the tool it calls is pinned in `[tools]`; see the README's Usage section.
 
 ## Testing
 

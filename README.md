@@ -24,7 +24,11 @@ docs/                                # contributor guidelines
 
 ## Usage
 
-Use the same tag for the mise `ref` and the prek `rev`.
+A consumer wires up three things, all pinned to the same release tag:
+
+1. The mise include, so the tasks exist: every hook runs `mise run <task>`.
+2. The tools those tasks call, pinned in `[tools]`.
+3. This repo in `prek.toml` with a `rev`; prek reads hook definitions (`entry`, `language`, `files`) from `.pre-commit-hooks.yaml` at that tag, so the consumer lists hooks by `id` only.
 
 In your `mise.toml`:
 
@@ -64,6 +68,8 @@ Notes:
 - Shared tasks do not declare tool versions. If a task fails with `command not found`, add the tool with `mise use <tool>@<version>`. Upgrade all tools at once with `mise run mise:bump` (within ranges) or `mise upgrade --bump` (raises ranges).
 - Without `?ref=` the default branch is used from cache. Run `mise run mise:cache:clear` to refetch it.
 - To override a shared task, list a local directory after the remote entry.
+- Hooks can be tuned per consumer (`args`, `files`, `exclude`, `priority`, `stages`) next to their `id` without copying the definition.
+- Bump the hook `rev` with `prek update` (respects `[update] cooldown_days`) and move the mise `ref` to the same tag.
 
 ## Contributing
 
