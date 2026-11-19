@@ -41,26 +41,26 @@ checks = 10
 repo = "https://github.com/jumanjihouse/pre-commit-hooks"
 rev = "3.0.0"
 hooks = [
-  { id = "forbid-binary", priority = "checks" },
-  { id = "script-must-have-extension", priority = "checks" },
-  { id = "shellcheck", priority = "checks" },
+  { id = "forbid-binary", name = "[remote] Forbid binaries", priority = "checks" },
+  { id = "script-must-have-extension", name = "[remote] Non-executable shell script filename ends in .sh", priority = "checks" },
+  { id = "shellcheck", name = "[remote] Test shell scripts with shellcheck", priority = "checks" },
 ]
 
 [[repos]]
 repo = "builtin"
 hooks = [
-  { id = "check-added-large-files", priority = "checks" },
-  { id = "check-executables-have-shebangs", priority = "checks" },
-  { id = "check-merge-conflict", priority = "checks" },
-  { id = "check-toml", priority = "checks" },
-  { id = "check-yaml", priority = "checks", args = [
+  { id = "check-added-large-files", name = "[builtin] check for added large files", priority = "checks" },
+  { id = "check-executables-have-shebangs", name = "[builtin] check that executables have shebangs", priority = "checks" },
+  { id = "check-merge-conflict", name = "[builtin] check for merge conflicts", priority = "checks" },
+  { id = "check-toml", name = "[builtin] check toml", priority = "checks" },
+  { id = "check-yaml", name = "[builtin] check yaml", priority = "checks", args = [
     "--allow-multiple-documents",
   ] },
-  { id = "detect-private-key", priority = "checks" },
-  { id = "end-of-file-fixer", priority = "fix-eof" },
-  { id = "fix-byte-order-marker", priority = "fix-bom" },
-  { id = "mixed-line-ending", priority = "fix-line-endings" },
-  { id = "trailing-whitespace", priority = "fix-whitespace", args = [
+  { id = "detect-private-key", name = "[builtin] detect private key", priority = "checks" },
+  { id = "end-of-file-fixer", name = "[builtin] fix end of files", priority = "fix-eof" },
+  { id = "fix-byte-order-marker", name = "[builtin] fix utf-8 byte order marker", priority = "fix-bom" },
+  { id = "mixed-line-ending", name = "[builtin] mixed line ending", priority = "fix-line-endings" },
+  { id = "trailing-whitespace", name = "[builtin] trim trailing whitespace", priority = "fix-whitespace", args = [
     "--markdown-linebreak-ext=md",
   ] },
 ]
@@ -69,14 +69,14 @@ hooks = [
 repo = "https://github.com/gitleaks/gitleaks"
 rev = "v8.30.1"
 hooks = [
-  { id = "gitleaks", priority = "checks" },
+  { id = "gitleaks", name = "[remote] Detect hardcoded secrets", priority = "checks" },
 ]
 
 [[repos]]
 repo = "https://github.com/compilerla/conventional-pre-commit"
 rev = "v4.5.0"
 hooks = [
-  { id = "conventional-pre-commit", priority = "checks", stages = [
+  { id = "conventional-pre-commit", name = "[remote] Conventional Commit", priority = "checks", stages = [
     "commit-msg",
   ], args = [
     "--verbose",
@@ -87,21 +87,21 @@ hooks = [
 [[repos]]
 repo = "local"
 hooks = [
-  { id = "mise-lock-check", name = "mise lock --check", entry = "mise run mise:lock:check", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.(toml|lock)$|^tasks/.*\.toml$', priority = "checks" },
-  { id = "mise-tasks-validate", name = "mise tasks validate", entry = "mise run mise:tasks:validate", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.toml$|^tasks/.*\.toml$', priority = "checks" },
-  { id = "shellcheck-lint", name = "shellcheck", entry = "mise run shellcheck:lint", language = "system", types = [
+  { id = "mise-lock-check", name = "[local] mise lock --check", entry = "mise run mise:lock:check", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.(toml|lock)$|^tasks/.*\.toml$', priority = "checks" },
+  { id = "mise-tasks-validate", name = "[local] mise tasks validate", entry = "mise run mise:tasks:validate", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.toml$|^tasks/.*\.toml$', priority = "checks" },
+  { id = "shellcheck-lint", name = "[local] shellcheck", entry = "mise run shellcheck:lint", language = "system", types = [
     "shell",
   ], priority = "checks" },
-  { id = "shfmt-fmt", name = "shfmt -w", entry = "mise run shfmt:fmt", language = "system", types = [
+  { id = "shfmt-fmt", name = "[local] shfmt -w", entry = "mise run shfmt:fmt", language = "system", types = [
     "shell",
   ], priority = "fix-shell" },
-  { id = "shfmt-lint", name = "shfmt -d", entry = "mise run shfmt:lint", language = "system", types = [
+  { id = "shfmt-lint", name = "[local] shfmt -d", entry = "mise run shfmt:lint", language = "system", types = [
     "shell",
   ], priority = "checks" },
-  { id = "taplo-fmt", name = "taplo fmt", entry = "mise run taplo:fmt", language = "system", types = [
+  { id = "taplo-fmt", name = "[local] taplo fmt", entry = "mise run taplo:fmt", language = "system", types = [
     "toml",
   ], priority = "fix-toml" },
-  { id = "taplo-lint", name = "taplo lint", entry = "mise run taplo:lint", language = "system", types = [
+  { id = "taplo-lint", name = "[local] taplo lint", entry = "mise run taplo:lint", language = "system", types = [
     "toml",
   ], priority = "checks" },
 ]
