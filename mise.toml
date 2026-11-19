@@ -7,10 +7,7 @@ minimum_release_age = "7d"
 
 [task_config]
 includes = [
-  "tasks/git-cliff.toml",
-  "tasks/hooks-prek.toml",
-  "tasks/mise-tasks.toml",
-  "tasks/taplo-tasks.toml",
+  "tasks",
 ]
 
 [tools]
