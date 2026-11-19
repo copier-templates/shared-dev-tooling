@@ -82,15 +82,16 @@ hooks = [
   ] },
 ]
 
+# Mirrors .pre-commit-hooks.yaml: this repo runs its own hooks as local tasks.
 [[repos]]
 repo = "local"
 hooks = [
-  { id = "mise-lock-check", name = "mise lock --check", entry = "mise lock --check", language = "system", pass_filenames = false, files = "^(mise\\.toml|mise\\.lock|tasks/.*\\.toml)$", priority = "checks" },
-  { id = "mise-tasks-validate", name = "mise tasks validate", entry = "mise tasks validate", language = "system", pass_filenames = false, files = "^(mise\\.toml|tasks/.*\\.toml)$", priority = "checks" },
-  { id = "taplo-fmt", name = "taplo fmt", entry = "mise exec -- taplo fmt", language = "system", types = [
+  { id = "mise-lock-check", name = "mise lock --check", entry = "mise run mise:lock:check", language = "system", pass_filenames = false, files = "^(mise\\.toml|mise\\.lock|tasks/.*\\.toml)$", priority = "checks" },
+  { id = "mise-tasks-validate", name = "mise tasks validate", entry = "mise run mise:tasks:validate", language = "system", pass_filenames = false, files = "^(mise\\.toml|tasks/.*\\.toml)$", priority = "checks" },
+  { id = "taplo-fmt", name = "taplo fmt", entry = "mise run taplo:fmt", language = "system", types = [
     "toml",
   ], priority = "fix-toml" },
-  { id = "taplo-lint", name = "taplo lint", entry = "mise exec -- taplo lint", language = "system", types = [
+  { id = "taplo-lint", name = "taplo lint", entry = "mise run taplo:lint", language = "system", types = [
     "toml",
   ], priority = "checks" },
 ]
