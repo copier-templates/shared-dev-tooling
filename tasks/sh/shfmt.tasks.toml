@@ -1,0 +1,13 @@
+["shfmt:lint"]
+description = "Check shell script formatting with shfmt without changing files"
+tags = [
+  "lint",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 shfmt -d"
+
+["shfmt:fmt"]
+description = "Format shell scripts in place with shfmt"
+tags = [
+  "fmt",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 shfmt -w"

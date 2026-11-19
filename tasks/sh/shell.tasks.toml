@@ -1,0 +1,9 @@
+["shell:validate"]
+description = "Lint and format-check every tracked shell script (shellcheck, shfmt -d)"
+tags = [
+  "lint",
+]
+depends = [
+  "shellcheck:lint",
+  "shfmt:lint",
+]

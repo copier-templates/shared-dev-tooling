@@ -32,3 +32,24 @@
   entry: mise run taplo:lint
   language: system
   types: [toml]
+
+- id: shellcheck-lint
+  name: shellcheck
+  description: Lint shell scripts (runs shellcheck:lint)
+  entry: mise run shellcheck:lint
+  language: system
+  types: [shell]
+
+- id: shfmt-fmt
+  name: shfmt -w
+  description: Format shell scripts in place (runs shfmt:fmt)
+  entry: mise run shfmt:fmt
+  language: system
+  types: [shell]
+
+- id: shfmt-lint
+  name: shfmt -d
+  description: Check shell script formatting (runs shfmt:lint)
+  entry: mise run shfmt:lint
+  language: system
+  types: [shell]

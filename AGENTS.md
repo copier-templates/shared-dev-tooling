@@ -6,6 +6,7 @@ Shared mise tasks (`tasks/`) and prek hooks (`.pre-commit-hooks.yaml`) consumed 
 
 - Editing a task, a `mise.toml`, or adding a tool: follow [docs/mise-guidelines.md](docs/mise-guidelines.md).
 - Editing `.pre-commit-hooks.yaml` or `prek.toml`: follow [docs/prek-guidelines.md](docs/prek-guidelines.md).
+- Editing a shell script in `tasks/`: follow [docs/shell-guidelines.md](docs/shell-guidelines.md).
 
 ## Example commands
 

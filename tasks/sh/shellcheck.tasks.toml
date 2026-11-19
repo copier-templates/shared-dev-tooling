@@ -1,0 +1,6 @@
+["shellcheck:lint"]
+description = "Lint shell scripts with shellcheck"
+tags = [
+  "lint",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 shellcheck"

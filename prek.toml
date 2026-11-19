@@ -34,6 +34,7 @@ fix-bom = 1
 fix-line-endings = 2
 fix-whitespace = 3
 fix-toml = 4
+fix-shell = 5
 checks = 10
 
 [[repos]]
@@ -88,6 +89,15 @@ repo = "local"
 hooks = [
   { id = "mise-lock-check", name = "mise lock --check", entry = "mise run mise:lock:check", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.(toml|lock)$|^tasks/.*\.toml$', priority = "checks" },
   { id = "mise-tasks-validate", name = "mise tasks validate", entry = "mise run mise:tasks:validate", language = "system", pass_filenames = false, files = '(^|/)mise(\..+)?\.toml$|^tasks/.*\.toml$', priority = "checks" },
+  { id = "shellcheck-lint", name = "shellcheck", entry = "mise run shellcheck:lint", language = "system", types = [
+    "shell",
+  ], priority = "checks" },
+  { id = "shfmt-fmt", name = "shfmt -w", entry = "mise run shfmt:fmt", language = "system", types = [
+    "shell",
+  ], priority = "fix-shell" },
+  { id = "shfmt-lint", name = "shfmt -d", entry = "mise run shfmt:lint", language = "system", types = [
+    "shell",
+  ], priority = "checks" },
   { id = "taplo-fmt", name = "taplo fmt", entry = "mise run taplo:fmt", language = "system", types = [
     "toml",
   ], priority = "fix-toml" },
