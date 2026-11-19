@@ -8,9 +8,9 @@ minimum_release_age = "7d"
 [tool_config]
 locked = true
 
+[task_config]
+includes = ["tasks/git-cliff.toml", "tasks/hooks-prek.toml"]
+
 [tools]
 git-cliff = "2.14"
-
-[tasks."changelog:generate"]
-description = "Generate CHANGELOG.md for review"
-run = "git-cliff -o CHANGELOG.md"
+prek = "0.5"

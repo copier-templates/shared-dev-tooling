@@ -1,0 +1,3 @@
+["changelog:generate"]
+description = "Generate CHANGELOG.md for the project"
+run = "git-cliff -o CHANGELOG.md"
