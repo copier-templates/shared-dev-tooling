@@ -1,0 +1,7 @@
+["taplo:lint"]
+description = "Lint TOML documents with taplo"
+run = "taplo lint"
+
+["taplo:fmt"]
+description = "Format TOML documents in place with taplo"
+run = "taplo fmt"

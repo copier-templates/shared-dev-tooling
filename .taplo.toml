@@ -1,0 +1,6 @@
+# Keep arrays sorted and always one item per line: column_width = 1 forces expansion,
+# and array_auto_collapse = false prevents collapsing back onto one line.
+[formatting]
+reorder_arrays = true
+column_width = 1
+array_auto_collapse = false

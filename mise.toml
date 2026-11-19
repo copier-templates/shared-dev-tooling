@@ -5,12 +5,14 @@ experimental = true
 lockfile = true
 minimum_release_age = "7d"
 
-[tool_config]
-locked = true
-
 [task_config]
-includes = ["tasks/git-cliff.toml", "tasks/hooks-prek.toml"]
+includes = [
+  "tasks/git-cliff.toml",
+  "tasks/hooks-prek.toml",
+  "tasks/taplo-tasks.toml",
+]
 
 [tools]
 git-cliff = "2.14"
 prek = "0.5"
+"cargo:taplo-cli" = { version = "0.10", features = "native-tls" }
