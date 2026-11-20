@@ -1,0 +1,38 @@
+# Pytest Tasks (Python tests via uv)
+["test:unit"]
+description = "Run unit tests (accepts trailing pytest args; skips when tests/unit is absent)"
+tags = [
+  "test",
+]
+quiet = true
+timeout = "10m"
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping unit tests as pyproject.toml is absent"
+  exit 0
+fi
+if [ ! -d tests/unit ]; then
+  echo "Skipping unit tests as tests/unit is absent"
+  exit 0
+fi
+uv run --frozen pytest tests/unit
+"""
+
+["test:integration"]
+description = "Run integration tests (accepts trailing pytest args; skips when tests/integration is absent)"
+tags = [
+  "test",
+]
+quiet = true
+timeout = "10m"
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping integration tests as pyproject.toml is absent"
+  exit 0
+fi
+if [ ! -d tests/integration ]; then
+  echo "Skipping integration tests as tests/integration is absent"
+  exit 0
+fi
+uv run --frozen pytest tests/integration
+"""

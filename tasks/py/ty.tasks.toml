@@ -1,0 +1,28 @@
+# Ty Tasks (Python type checking via uv)
+["ty:check"]
+description = "Type-check Python with ty"
+tags = [
+  "lint",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ty check as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ty check
+"""
+
+["ty:fix"]
+description = "Type-check Python with ty and autofix"
+tags = [
+  "fix",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ty check as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ty check --fix
+"""

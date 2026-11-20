@@ -7,6 +7,12 @@
 # git-cliff, commit it as chore(release), tag, and optionally push.
 set -euo pipefail
 
+# Gate bash 5.1+. This check itself parses under bash 3.2; plain echo because die/gum are not set up yet.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 1))); then
+  echo "error: bash 5.1+ required (found ${BASH_VERSION:-unknown})" >&2
+  exit 1
+fi
+
 # shellcheck disable=SC2154 # set by mise from the --allow-unsynced #USAGE flag
 allow_unsynced=${usage_allow_unsynced:-false}
 
@@ -26,7 +32,7 @@ if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]]; then
 fi
 
 last_local=$(git tag --list --sort=-v:refname | sed -n '1p')
-last_remote=$(git ls-remote --tags --refs origin | sed 's#.*refs/tags/##' | sort -V | tail -n 1)
+last_remote=$(git ls-remote --tags --refs origin | sed 's#.*refs/tags/##' | sort -t . -k 1,1n -k 2,2n -k 3,3n | tail -n 1)
 read -r ahead behind <<<"$(git rev-list --left-right --count HEAD...origin/main)"
 gum style --border rounded --border-foreground 39 --padding "0 1" --margin "1 0" \
   "$(printf 'Last tag (local):  %s\nLast tag (remote): %s\nmain (local):      %s\nmain (remote):     %s\nDrift:             %s ahead, %s behind origin/main' \

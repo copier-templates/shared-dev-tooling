@@ -13,6 +13,7 @@ includes = [
 [tools]
 git-cliff = "2.14"
 prek = "0.5"
+uv = "0.13"
 "cargo:taplo-cli" = { version = "0.10", features = "native-tls" }
 gum = "0.17"
 shellcheck = "0.11"

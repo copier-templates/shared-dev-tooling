@@ -1,0 +1,56 @@
+# Ruff Tasks (Python lint and format via uv)
+["ruff:lint"]
+description = "Lint Python with Ruff (check-only)"
+tags = [
+  "lint",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ruff check as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ruff check
+"""
+
+["ruff:fix"]
+description = "Lint Python with Ruff and autofix"
+tags = [
+  "fix",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ruff check as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ruff check --fix
+"""
+
+["ruff:fmt"]
+description = "Format Python code in place with Ruff"
+tags = [
+  "fmt",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ruff format as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ruff format
+"""
+
+["ruff:fmt:check"]
+description = "Check Python formatting with Ruff without changing files"
+tags = [
+  "lint",
+]
+quiet = true
+run = """
+if [ ! -f pyproject.toml ]; then
+  echo "Skipping ruff format check as pyproject.toml is absent"
+  exit 0
+fi
+uv run --frozen ruff format --check
+"""
