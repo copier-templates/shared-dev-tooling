@@ -36,7 +36,7 @@ tasks/<category>/<tool>.tasks.toml   # e.g. tasks/toml/taplo.tasks.toml, tasks/p
 ## Task definitions
 
 - Name tasks `<tool>:<verb>`, with further `:` segments for sub-verbs (`taplo:lint`, `mise:lock:check`).
-- Every task has a `description` and at least one of these tags: `lint`, `fmt`, `fix`, `test`, `setup`, `release`, `maintenance`. Tags let `mise run --tag lint` select checks across tools.
+- Every task has a `description` and at least one of these tags: `lint`, `fmt`, `fix`, `test`, `setup`, `release`, `maintenance`. See [Task tags](../../README.md#task-tags) for listing and running by tag.
 - Tasks that accept files take them as trailing arguments (`mise run taplo:lint a.toml b.toml` appends them to `run`), so prek hooks can pass filenames.
 - Tasks define workflows only. Project configuration (`prek.toml`, `.taplo.toml`, `cliff.toml`, linter configs) belongs to the consumer.
 
