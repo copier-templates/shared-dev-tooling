@@ -318,3 +318,13 @@ mise.*.local.lock
 
 # https://mise.jdx.dev/configuration.html#tool-versions
 #.tool-versions
+
+# ==============================================================================
+# Project: Starlight docs site (local, not upstream)
+# ==============================================================================
+node_modules/
+.astro/
+src/content/docs/
+# Re-include JS/TS project files ignored by some global gitignores (*.json)
+!package.json
+!tsconfig.json
