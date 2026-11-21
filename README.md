@@ -20,9 +20,28 @@ This repo ships workflows only: task and hook definitions. It never ships projec
 .pre-commit-hooks.yaml               # prek hook manifest
 tasks/<category>/<tool>.tasks.toml   # shared mise tasks, named <tool>:<verb>
 tasks/<category>/<name>.sh           # shared file tasks, e.g. release:cut
-docs/guidelines/                     # contributor guidelines
-CHANGELOG.md                         # release notes
+docs/guidelines/                     # contributor guidelines (also rendered to the docs site)
+tasks/docs/starlight.tasks.toml      # shared docs site tasks (docs:*), powered by Astro/Starlight
+astro.config.mjs                     # Starlight site config (repo-only)
+src/content.config.ts                # docs collection schema (repo-only)
+src/styles/                          # site themes: dark + light, extensible (repo-only)
+scripts/docs-sync.sh                 # syncs docs/ + root Markdown into src/content/docs/ (consumers provide their own)
+mise.toml                            # toolchain + task includes (no local tasks)
 ```
+
+## Docs
+
+This repo hosts its own docs as a static Starlight site from `docs/`, plus `README.md`, `AGENTS.md`, `GLOSSARY.md`, and `CHANGELOG.md`. See [starlight guidelines](docs/guidelines/starlight.md) for the full rules.
+
+```sh
+mise run bun:install # one-time install from bun.lock
+mise run docs:dev     # local preview with hot reload
+mise run docs:check   # astro check
+mise run docs:build   # static dist/ + Pagefind index
+mise run docs:preview # preview the production build
+```
+
+Dark and light themes ship via the `starlight-theme-rose-pine` plugin, with local tweaks in `src/styles/custom.css`. Switch with the one-click sun/moon button. Add more with `src/styles/themes/<name>.css` (see the starlight guideline). The site deploys to GitHub Pages from `.github/workflows/docs.yml` on every `main` push. Enable once with `mise run docs:pages:enable`.
 
 ## Usage
 
@@ -105,7 +124,7 @@ mise run --tag lint --tag fmt
 
 ## Contributing
 
-Follow the guidelines in [docs/guidelines/](docs/guidelines/): [mise](docs/guidelines/mise.md) for tasks, [prek](docs/guidelines/prek.md) for hooks, and [shell](docs/guidelines/shell.md) for scripts.
+Follow the guidelines in [docs/guidelines/](docs/guidelines/): [mise](docs/guidelines/mise.md) for tasks, [prek](docs/guidelines/prek.md) for hooks, [shell](docs/guidelines/shell.md) for scripts, and [starlight](docs/guidelines/starlight.md) for the Starlight site.
 
 ## Releasing
 

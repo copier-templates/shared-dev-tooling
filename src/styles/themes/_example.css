@@ -1,0 +1,10 @@
+/* Example third theme. Copy to <name>.css, replace <name>, and append
+ * './src/styles/themes/<name>.css' to customCss in astro.config.mjs.
+ * Starlight sets data-theme on <html>; the picker stays Dark/Light/Auto
+ * unless you add a plugin or custom ThemeSelect component override. */
+
+:root[data-theme='rose'] {
+  --sl-color-accent-low: hsl(340, 60%, 20%);
+  --sl-color-accent: hsl(340, 80%, 55%);
+  --sl-color-accent-high: hsl(340, 90%, 85%);
+}

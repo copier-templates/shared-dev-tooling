@@ -1,0 +1,76 @@
+# Docs Tasks (Starlight documentation site workflows, powered by Astro/Starlight)
+#
+# File is named for the implementation (starlight); tasks use the stable
+# docs:* workflow interface. Consumers adopting this group must provide
+# their own docs site (package.json, astro.config.mjs) and, when they need
+# generated content, their own scripts/docs-sync.sh mapping.
+
+["docs:sync"]
+description = "Sync docs/ and root Markdown into generated Starlight content (runs scripts/docs-sync.sh)"
+tags = [
+  "setup",
+]
+run = "scripts/docs-sync.sh"
+
+["docs:dev"]
+description = "Start local Starlight dev server with hot reload"
+tags = [
+  "setup",
+]
+depends = [
+  "bun:install",
+  "docs:sync",
+]
+run = "bunx --bun astro dev"
+
+["docs:check"]
+description = "Type-check Astro/Starlight config and frontmatter schemas"
+tags = [
+  "lint",
+]
+depends = [
+  "bun:install",
+  "docs:sync",
+]
+run = "bunx --bun astro check"
+
+["docs:build"]
+description = "Build static site and Pagefind search index"
+tags = [
+  "maintenance",
+]
+depends = [
+  "docs:check",
+]
+run = "bunx --bun astro build"
+
+["docs:preview"]
+description = "Preview the production build locally"
+tags = [
+  "maintenance",
+]
+depends = [
+  "docs:build",
+]
+run = "bunx --bun astro preview"
+
+["docs:clean"]
+description = "Remove generated Starlight content and Astro build cache"
+tags = [
+  "maintenance",
+]
+run = "rm -rf src/content/docs/ .astro/ dist/"
+
+["docs:pages:enable"]
+description = "Enable GitHub Pages (GitHub Actions workflow source) via gh"
+tags = [
+  "setup",
+]
+run = "repo=\"$(gh repo view --json nameWithOwner --jq .nameWithOwner)\"; gh api \"repos/${repo}/pages\" -f build_type=workflow --jq '.html_url' 2>/dev/null || gh api \"repos/${repo}/pages\" --method POST -f build_type=workflow --jq '.html_url'"
+
+["docs:deploy"]
+description = "Trigger the docs GitHub Pages workflow on main via gh"
+tags = [
+  "release",
+]
+run = "gh workflow run docs.yml --ref main"

@@ -1,0 +1,125 @@
+---
+// One-click sun/moon button replacing Starlight's Dark/Light/Auto select
+// via the `ThemeSelect` override in astro.config.mjs. One click flips between
+// light; the choice is stored in the same `starlight-theme` localStorage key
+// Starlight itself uses, so the pre-paint ThemeProvider script keeps working
+// and there is no theme flash. With no stored choice, system changes are
+// followed until the first click.
+---
+
+<starlight-theme-toggle>
+  <button
+    type="button"
+    class="theme-toggle"
+    aria-label="Toggle color theme"
+    title="Toggle color theme"
+  >
+    <svg
+      class="theme-toggle-icon icon-sun"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg
+      class="theme-toggle-icon icon-moon"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+</starlight-theme-toggle>
+
+<style>
+  starlight-theme-toggle {
+    display: inline-flex;
+  }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: var(--sl-color-text);
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    background-color: var(--sl-color-gray-5);
+  }
+  .theme-toggle-icon {
+    display: none;
+  }
+  /* Sun in dark mode, moon in light mode: the icon shows the theme a
+  click switches to. */
+  :root[data-theme='dark'] .icon-sun {
+    display: block;
+  }
+  :root[data-theme='light'] .icon-moon {
+    display: block;
+  }
+</style>
+
+<script>
+  const storageKey = 'starlight-theme';
+
+  function loadStored() {
+    try {
+      return localStorage.getItem(storageKey);
+    } catch {
+      return null;
+    }
+  }
+
+  // Follow system changes until the user picks an explicit theme.
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    if (!loadStored()) {
+      document.documentElement.dataset.theme = e.matches ? 'light' : 'dark';
+    }
+  });
+
+  class StarlightThemeToggle extends HTMLElement {
+    constructor() {
+      super();
+      this.querySelector('button')?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem(storageKey, next);
+        } catch {
+          // Storage unavailable (e.g. private mode): theme still flips for this page.
+        }
+      });
+    }
+  }
+
+  if (!customElements.get('starlight-theme-toggle')) {
+    customElements.define('starlight-theme-toggle', StarlightThemeToggle);
+  }
+</script>

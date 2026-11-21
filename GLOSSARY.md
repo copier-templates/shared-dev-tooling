@@ -1,6 +1,6 @@
-# Shared Dev Tooling
+# Glossary
 
-Reusable mise tasks and prek hooks that consumer repositories pin to a single release and reuse.
+This repo provides reusable mise tasks and prek hooks. Consumer repositories pin them to a single release and reuse them.
 
 ## Language
 

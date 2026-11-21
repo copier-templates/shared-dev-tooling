@@ -1,6 +1,6 @@
 # bun guidelines
 
-Rules for Bun 1.4+ as runtime, package manager, and test runner. Tasks live in `tasks/bun/bun.tasks.toml`; run them with `mise run bun:<verb>`, never bare `bun` in hooks or CI.
+Rules for Bun 1.4+ as runtime, package manager, and test runner. Tasks live in `tasks/bun/bun.tasks.toml`. Run them with `mise run bun:<verb>`, never bare `bun` in hooks or CI.
 
 ## Toolchain
 
@@ -11,7 +11,7 @@ Rules for Bun 1.4+ as runtime, package manager, and test runner. Tasks live in `
 ## Project files
 
 - `package.json` is the source of truth: `dependencies`, `scripts`, `workspaces`, `trustedDependencies`, `overrides`. `bun.lock` is the resolved snapshot. Commit both.
-- Keep `bunfig.toml` minimal. Prefer defaults; set `[install]` keys only when the project needs them (`linker`, `minimumReleaseAge`, `minimumReleaseAgeExcludes`).
+- Keep `bunfig.toml` minimal. Prefer defaults. Set `[install]` keys only when the project needs them (`linker`, `minimumReleaseAge`, `minimumReleaseAgeExcludes`).
 - Do not commit `node_modules/`, `dist/`, `build/`, or `coverage/`. `bun:clean` removes them.
 - New workspaces default to `linker = "isolated"` (no phantom dependencies). Single-package projects default to `hoisted`. Do not mix linkers in one repo.
 - All `bun:*` tasks except `bun:clean` skip when `package.json` is absent (this repo has one only for the docs site). `bun:clean` always runs. Consumers with JS/TS must have one.
@@ -27,7 +27,7 @@ Rules for Bun 1.4+ as runtime, package manager, and test runner. Tasks live in `
 
 ## Scripts
 
-- Run `package.json` scripts with `bun run <script>`. `bun run <script>` runs the script; `bun test` starts the test runner; `bunx <pkg>` runs a one-off package binary.
+- Run `package.json` scripts with `bun run <script>`. `bun test` starts the test runner; `bunx <pkg>` runs a one-off package binary.
 - Prefer `bun run --parallel --filter` over `concurrently` / `npm-run-all`. Prefix behavior and `pre` / `post` hooks are built in.
 - Pass file or filter arguments as trailing args so tasks and hooks can forward them (`mise run bun:test ./pkg -t "pattern"`).
 
@@ -36,7 +36,7 @@ Rules for Bun 1.4+ as runtime, package manager, and test runner. Tasks live in `
 - Name tests `*.test.ts` next to the code. Run all with `bun:test` (`bun test`).
 - Filter with an explicit path (`bun test ./pkg/foo.test.ts`) or `-t "pattern"` (`--test-name-pattern`). Do not use Playwright/Mocha `--grep` flags.
 - Use `describe` / `it` / `expect` and `mock from "bun:test"`. Do not use `jest.fn()` / `jest.mock()` shims in new code.
-- For CI sharding use `bun test --shard`, for per-file isolation `--isolate`, for speed `--parallel`. Keep the default task invocation unflagged; add flags at the call site.
+- For CI sharding use `bun test --shard`, for per-file isolation `--isolate`, for speed `--parallel`. Keep the default task invocation unflagged. Add flags at the call site.
 
 ## Style and runtime
 

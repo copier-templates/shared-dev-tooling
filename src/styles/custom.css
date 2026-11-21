@@ -1,0 +1,18 @@
+/* Shared Dev Tooling theme: Rosé Pine via starlight-theme-rose-pine plugin
+ * (dark: main/pine, light: dawn/pine defaults) + local tweaks.
+ * The plugin appends its layered stylesheets after this file, so do NOT set
+ * --sl-color-accent-* here unlayered — unlayered CSS beats the plugin's
+ * `rose-pine` cascade layer. Keep only non-palette tweaks below.
+ * See docs/guidelines/starlight.md. */
+
+:root {
+  --sl-content-width: 50rem;
+}
+
+/* Badge rows (e.g. the README shields) must stay on one line. Starlight
+ * sets content images to `display: block`; linked images in a paragraph
+ * are badges, so keep them inline. Real figures stay block-level. */
+.sl-markdown-content p > a > img {
+  display: inline-block;
+  vertical-align: middle;
+}
