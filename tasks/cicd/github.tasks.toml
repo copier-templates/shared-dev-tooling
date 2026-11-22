@@ -1,0 +1,41 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
+["gh:lint"]
+description = "Lint GitHub Actions workflows with jactionlint"
+tags = [
+  "lint",
+]
+quiet = true
+raw_args = true
+skip_if = "test -z \"$(find .github/workflows templates/.github/workflows -maxdepth 1 -name '*.yml' -o -name '*.yaml' 2>/dev/null | head -n 1)\""
+sources = [
+  ".github/workflows/**/*.{yml,yaml}",
+  ".github/actions/**/*.{yml,yaml}",
+  "templates/.github/workflows/**/*.{yml,yaml}",
+  ".github/jactionlint.yaml",
+]
+run = """
+if [ $# -eq 0 ]; then
+  shopt -s nullglob
+  set -- .github/workflows/*.{yml,yaml} templates/.github/workflows/*.{yml,yaml}
+  if [ $# -eq 0 ]; then
+    exit 0
+  fi
+fi
+exec jactionlint "$@"
+"""
+
+["gh:actions:check"]
+description = "Check if GitHub Actions references have updates (read-only)"
+tags = [
+  "audit",
+]
+quiet = true
+run = "jactionlint update --check"
+
+["gh:actions:update"]
+description = "Update GitHub Actions references to latest eligible releases"
+tags = [
+  "deps",
+]
+quiet = true
+run = "jactionlint update --apply"
