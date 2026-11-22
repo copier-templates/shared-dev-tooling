@@ -1,6 +1,16 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["changelog:generate"]
 description = "Generate CHANGELOG.md for the project"
 tags = [
-  "release",
+  "changelog",
+  "docs",
 ]
 run = "git-cliff -o CHANGELOG.md"
+
+["changelog:unreleased"]
+description = "Preview unreleased changelog entries without writing files"
+tags = [
+  "info",
+  "changelog",
+]
+run = "git-cliff --unreleased"
