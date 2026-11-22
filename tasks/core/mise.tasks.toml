@@ -1,14 +1,15 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["mise:doctor"]
 description = "Diagnose the mise installation and configuration"
 tags = [
-  "maintenance",
+  "info",
 ]
 run = "mise doctor"
 
 ["mise:lock"]
 description = "Refresh mise.lock for all configured tools and task tools"
 tags = [
-  "maintenance",
+  "deps",
 ]
 run = "mise lock"
 
@@ -34,19 +35,19 @@ tags = [
 depends = [
   "mise:lock:check",
 ]
-run = "mise install"
+run = "mise install --include-task-tools"
 
 ["mise:outdated"]
 description = "List tools with newer versions than the locked ones"
 tags = [
-  "maintenance",
+  "info",
 ]
 run = "mise outdated --no-global"
 
 ["mise:bump"]
 description = "Re-resolve tool requests to latest versions and refresh mise.lock"
 tags = [
-  "maintenance",
+  "deps",
 ]
 run = "mise lock --bump"
 depends_post = [
@@ -56,16 +57,28 @@ depends_post = [
 ["mise:cache:clear"]
 description = "Clear mise cache so remote git:: includes are refetched"
 tags = [
-  "maintenance",
+  "clean",
 ]
 run = "mise cache clear"
 
 ["mise:tags"]
 description = "List all task tags (sorted, unique)"
 tags = [
-  "maintenance",
+  "info",
 ]
 quiet = true
-run = '''
-mise tasks ls --json | python3 -c "import json, sys; data = json.load(sys.stdin); print('\n'.join(sorted({t for d in data for t in d.get('tags', [])})))"
-'''
+run = "mise tasks ls --json | tr '\\n' ' ' | grep --color=never -o '\"tags\": *\\[[^]]*\\]' | tr ',' '\\n' | grep --color=never -o '\"[^\"]*\"' | grep --color=never -v '\"tags\"' | tr -d '\"' | sort -u"
+
+["mise:fmt"]
+description = "Format mise TOML configuration in place"
+tags = [
+  "fmt",
+]
+run = "mise fmt"
+
+["mise:fmt:check"]
+description = "Check mise TOML formatting without changing files"
+tags = [
+  "lint",
+]
+run = "mise fmt --check"

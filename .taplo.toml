@@ -1,5 +1,12 @@
 # Keep arrays sorted and always one item per line: column_width = 1 forces expansion,
 # and array_auto_collapse = false prevents collapsing back onto one line.
+# mise fmt owns mise configuration (its ordering/TOML 1.1 rules differ from taplo),
+# so taplo skips those files; run mise run mise:fmt for them.
+exclude = [
+  "mise.*.toml",
+  "mise.toml",
+  "tasks/**/*.tasks.toml",
+]
 [formatting]
 reorder_arrays = true
 column_width = 1

@@ -6,9 +6,7 @@ lockfile = true
 minimum_release_age = "7d"
 
 [task_config]
-includes = [
-  "tasks",
-]
+includes = ["tasks"]
 
 [tools]
 git-cliff = "2.14"

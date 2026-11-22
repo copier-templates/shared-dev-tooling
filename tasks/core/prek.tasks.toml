@@ -1,13 +1,41 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["prek:install"]
 description = "Install prek git hooks"
 tags = [
   "setup",
 ]
-run = "prek install --install-hooks --force"
+skip_if = "! git rev-parse --git-dir >/dev/null 2>&1 || ! test -f .pre-commit-config.yaml -o -f prek.toml"
+run = "prek install --prepare-hooks --force"
 
 ["prek:run"]
 description = "Run all hooks on all files"
 tags = [
-  "lint",
+  "hooks",
+]
+raw_args = true
+skip_if = "! test -f .pre-commit-config.yaml -o -f prek.toml"
+wait_for = [
+  "prek:install",
 ]
 run = "prek run --all-files"
+
+["prek:validate"]
+description = "Validate prek configuration"
+tags = [
+  "lint",
+]
+skip_if = "! test -f .pre-commit-config.yaml -o -f prek.toml"
+run = """
+set --
+[ -f prek.toml ] && set -- "$@" prek.toml
+[ -f .pre-commit-config.yaml ] && set -- "$@" .pre-commit-config.yaml
+exec prek validate-config "$@"
+"""
+
+["prek:update"]
+description = "Update hook revisions in prek config"
+tags = [
+  "deps",
+]
+skip_if = "! test -f .pre-commit-config.yaml -o -f prek.toml"
+run = "prek update"

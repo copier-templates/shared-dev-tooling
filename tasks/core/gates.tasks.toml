@@ -1,0 +1,47 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
+# Gate tasks: tag-based entry points for CI and local workflows.
+# Each gate depends on every loaded task with the matching tag.
+# optional = true is required in a shared library so partial consumer
+# includes (e.g. only tasks/py) don't error on missing tags.
+["lint"]
+description = "Run every loaded lint task"
+depends = [
+  { tag = "lint", optional = true },
+]
+
+["fmt"]
+description = "Run every loaded formatter task"
+depends = [
+  { tag = "fmt", optional = true },
+]
+
+["fix"]
+description = "Run every loaded autofix task"
+depends = [
+  { tag = "fix", optional = true },
+]
+
+["test"]
+description = "Run every loaded test task"
+depends = [
+  { tag = "test", optional = true },
+]
+
+["audit"]
+description = "Run every loaded audit task"
+depends = [
+  { tag = "audit", optional = true },
+]
+
+["setup"]
+description = "Run every loaded setup task"
+depends = [
+  { tag = "setup", optional = true },
+]
+
+["ci"]
+description = "Run lint and test gates (CI entry point)"
+depends = [
+  "lint",
+  "test",
+]
