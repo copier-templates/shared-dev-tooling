@@ -1,7 +1,14 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["taplo:lint"]
 description = "Lint TOML documents with taplo"
 tags = [
   "lint",
+]
+skip_if = "test -z \"$(git ls-files -- '*.toml')\""
+sources = [
+  "**/*.toml",
+  "taplo.toml",
+  ".taplo.toml",
 ]
 run = "taplo lint"
 
@@ -10,4 +17,23 @@ description = "Format TOML documents in place with taplo"
 tags = [
   "fmt",
 ]
+skip_if = "test -z \"$(git ls-files -- '*.toml')\""
+sources = [
+  "**/*.toml",
+  "taplo.toml",
+  ".taplo.toml",
+]
 run = "taplo fmt"
+
+["taplo:fmt:check"]
+description = "Check TOML formatting with taplo without changing files"
+tags = [
+  "lint",
+]
+skip_if = "test -z \"$(git ls-files -- '*.toml')\""
+sources = [
+  "**/*.toml",
+  "taplo.toml",
+  ".taplo.toml",
+]
+run = "taplo fmt --check"

@@ -1,9 +1,19 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["shell:validate"]
 description = "Lint and format-check every tracked shell script (shellcheck, shfmt -d)"
-tags = [
-  "lint",
-]
 depends = [
   "shellcheck:lint",
   "shfmt:lint",
 ]
+
+["shell:fmt"]
+description = "Format every tracked shell script in place (shfmt -w)"
+tags = [
+  "fmt",
+]
+skip_if = "test -z \"$(git ls-files -- '*.sh')\""
+sources = [
+  "**/*.sh",
+  ".editorconfig",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 -r shfmt -w"

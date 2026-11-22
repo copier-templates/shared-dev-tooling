@@ -1,13 +1,24 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["shfmt:lint"]
 description = "Check shell script formatting with shfmt without changing files"
 tags = [
   "lint",
 ]
-run = "git ls-files -z -- '*.sh' | xargs -0 shfmt -d"
+skip_if = "test -z \"$(git ls-files -- '*.sh')\""
+sources = [
+  "**/*.sh",
+  ".editorconfig",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 -r shfmt -d"
 
 ["shfmt:fmt"]
 description = "Format shell scripts in place with shfmt"
 tags = [
   "fmt",
 ]
-run = "git ls-files -z -- '*.sh' | xargs -0 shfmt -w"
+skip_if = "test -z \"$(git ls-files -- '*.sh')\""
+sources = [
+  "**/*.sh",
+  ".editorconfig",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 -r shfmt -w"

@@ -1,6 +1,12 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 ["shellcheck:lint"]
 description = "Lint shell scripts with shellcheck"
 tags = [
   "lint",
 ]
-run = "git ls-files -z -- '*.sh' | xargs -0 shellcheck"
+skip_if = "test -z \"$(git ls-files -- '*.sh')\""
+sources = [
+  "**/*.sh",
+  ".shellcheckrc",
+]
+run = "git ls-files -z -- '*.sh' | xargs -0 -r shellcheck"
