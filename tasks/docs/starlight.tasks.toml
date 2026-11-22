@@ -1,3 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 # Docs Tasks (Starlight documentation site workflows, powered by Astro/Starlight)
 #
 # File is named for the implementation (starlight); tasks use the stable
@@ -8,17 +9,20 @@
 ["docs:sync"]
 description = "Sync docs/ and root Markdown into generated Starlight content (runs scripts/docs-sync.sh)"
 tags = [
-  "setup",
+  "docs",
 ]
+skip_if = "! test -f scripts/docs-sync.sh"
 run = "scripts/docs-sync.sh"
 
 ["docs:dev"]
 description = "Start local Starlight dev server with hot reload"
 tags = [
-  "setup",
+  "dev",
+  "docs",
 ]
+interactive = true
 depends = [
-  "bun:install",
+  { task = "bun:install", optional = true },
   "docs:sync",
 ]
 run = "bunx --bun astro dev"
@@ -27,9 +31,10 @@ run = "bunx --bun astro dev"
 description = "Type-check Astro/Starlight config and frontmatter schemas"
 tags = [
   "lint",
+  "docs",
 ]
 depends = [
-  "bun:install",
+  { task = "bun:install", optional = true },
   "docs:sync",
 ]
 run = "bunx --bun astro check"
@@ -37,7 +42,8 @@ run = "bunx --bun astro check"
 ["docs:build"]
 description = "Build static site and Pagefind search index"
 tags = [
-  "maintenance",
+  "build",
+  "docs",
 ]
 depends = [
   "docs:check",
@@ -47,8 +53,10 @@ run = "bunx --bun astro build"
 ["docs:preview"]
 description = "Preview the production build locally"
 tags = [
-  "maintenance",
+  "dev",
+  "docs",
 ]
+interactive = true
 depends = [
   "docs:build",
 ]
@@ -57,14 +65,16 @@ run = "bunx --bun astro preview"
 ["docs:clean"]
 description = "Remove generated Starlight content and Astro build cache"
 tags = [
-  "maintenance",
+  "clean",
+  "docs",
 ]
 run = "rm -rf src/content/docs/ .astro/ dist/"
 
 ["docs:pages:enable"]
 description = "Enable GitHub Pages (GitHub Actions workflow source) via gh"
 tags = [
-  "setup",
+  "ops",
+  "docs",
 ]
 run = "repo=\"$(gh repo view --json nameWithOwner --jq .nameWithOwner)\"; gh api \"repos/${repo}/pages\" -f build_type=workflow --jq '.html_url' 2>/dev/null || gh api \"repos/${repo}/pages\" --method POST -f build_type=workflow --jq '.html_url'"
 
@@ -72,5 +82,10 @@ run = "repo=\"$(gh repo view --json nameWithOwner --jq .nameWithOwner)\"; gh api
 description = "Trigger the docs GitHub Pages workflow on main via gh"
 tags = [
   "release",
+  "docs",
 ]
+depends = [
+  "docs:build",
+]
+confirm = "Trigger docs.yml workflow on main?"
 run = "gh workflow run docs.yml --ref main"
