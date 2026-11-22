@@ -1,3 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 # Bun Tasks (JavaScript/TypeScript dependencies, tests, and artifacts)
 ["bun:install"]
 description = "Install dependencies from the lockfile without updating it (skips when package.json is absent)"
@@ -5,55 +6,35 @@ tags = [
   "setup",
 ]
 quiet = true
-run = """
-if [ ! -f package.json ]; then
-  echo "Skipping bun install as package.json is absent"
-  exit 0
-fi
-bun install --frozen-lockfile
-"""
+skip_if = "! test -f package.json"
+run = "bun install --frozen-lockfile"
 
 ["bun:update"]
 description = "Update dependencies within their declared ranges (skips when package.json is absent)"
 tags = [
-  "maintenance",
+  "deps",
 ]
 quiet = true
-run = """
-if [ ! -f package.json ]; then
-  echo "Skipping bun update as package.json is absent"
-  exit 0
-fi
-bun update
-"""
+skip_if = "! test -f package.json"
+run = "bun update"
 
 ["bun:outdated"]
 description = "List dependencies with newer available versions (skips when package.json is absent)"
 tags = [
-  "maintenance",
+  "info",
 ]
 quiet = true
-run = """
-if [ ! -f package.json ]; then
-  echo "Skipping bun outdated as package.json is absent"
-  exit 0
-fi
-bun outdated
-"""
+skip_if = "! test -f package.json"
+run = "bun outdated"
 
 ["bun:audit"]
 description = "Audit installed dependencies for known vulnerabilities (skips when package.json is absent)"
 tags = [
-  "lint",
+  "audit",
 ]
 quiet = true
-run = """
-if [ ! -f package.json ]; then
-  echo "Skipping bun audit as package.json is absent"
-  exit 0
-fi
-bun audit
-"""
+skip_if = "! test -f package.json"
+run = "bun audit"
 
 ["bun:test"]
 description = "Run tests with Bun (accepts trailing file or filter arguments; skips when package.json is absent)"
@@ -62,18 +43,22 @@ tags = [
 ]
 quiet = true
 timeout = "10m"
-run = """
-if [ ! -f package.json ]; then
-  echo "Skipping bun test as package.json is absent"
-  exit 0
-fi
-bun test
-"""
+raw_args = true
+skip_if = "! test -f package.json"
+sources = [
+  "package.json",
+  "bun.lock",
+  "**/*.{js,jsx,ts,tsx,mjs,cjs}",
+]
+wait_for = [
+  "bun:install",
+]
+run = "bun test"
 
 ["bun:clean"]
 description = "Clean dependency, build, and coverage artifacts"
 tags = [
-  "maintenance",
+  "clean",
 ]
 quiet = true
 run = "rm -rf node_modules/ dist/ build/ coverage/"
