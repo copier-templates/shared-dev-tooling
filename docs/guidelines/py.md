@@ -30,8 +30,8 @@ Rules for Python 3.15+ with uv as package manager. Tasks live in `tasks/py/*.tas
 
 ## Tests
 
-- Layout is `tests/unit/` and `tests/integration/`, or flat `tests/` (`test:py`). `testpaths = ["tests"]` with `unit` / `integration` markers (see `pyproject.toml`).
-- Run with `test:unit` / `test:integration` (nested) or `test:py` (flat). Each skips with exit 0 when `pyproject.toml` or its test directory is absent, so non-Python consumers stay green.
+- Layout is `tests/unit/` and `tests/integration/`, or flat `tests/` (`test:all`). `testpaths = ["tests"]` with `unit` / `integration` markers (see `pyproject.toml`).
+- Run with `test:unit` / `test:integration` (nested) or `test:all` (flat). Each skips with exit 0 when `pyproject.toml` or its test directory is absent, so non-Python consumers stay green.
 - Pass filters as trailing args (`mise run test:unit -- -k "pattern" -x --lf --tb=short -q`). Keep the default task invocation unflagged. Put `--collect-only`, `--junitxml`, `--durations`, and `-m` at the call site.
 
 ## Validation

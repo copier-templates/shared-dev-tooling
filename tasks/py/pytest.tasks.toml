@@ -1,3 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 # Pytest Tasks (Python tests via uv)
 ["test:unit"]
 description = "Run unit tests (accepts trailing pytest args; skips when tests/unit is absent)"
@@ -6,17 +7,17 @@ tags = [
 ]
 quiet = true
 timeout = "10m"
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping unit tests as pyproject.toml is absent"
-  exit 0
-fi
-if [ ! -d tests/unit ]; then
-  echo "Skipping unit tests as tests/unit is absent"
-  exit 0
-fi
-uv run --frozen pytest tests/unit
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml || ! test -d tests/unit"
+sources = [
+  "pyproject.toml",
+  "uv.lock",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+run = "uv run --frozen pytest tests/unit"
 
 ["test:integration"]
 description = "Run integration tests (accepts trailing pytest args; skips when tests/integration is absent)"
@@ -25,14 +26,33 @@ tags = [
 ]
 quiet = true
 timeout = "10m"
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping integration tests as pyproject.toml is absent"
-  exit 0
-fi
-if [ ! -d tests/integration ]; then
-  echo "Skipping integration tests as tests/integration is absent"
-  exit 0
-fi
-uv run --frozen pytest tests/integration
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml || ! test -d tests/integration"
+sources = [
+  "pyproject.toml",
+  "uv.lock",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+run = "uv run --frozen pytest tests/integration"
+
+["test:all"]
+description = "Run pytest over flat tests/ layout (accepts trailing pytest args; skips when tests/ is absent)"
+tags = [
+  "test",
+]
+quiet = true
+timeout = "10m"
+raw_args = true
+skip_if = "! test -f pyproject.toml || ! test -d tests"
+sources = [
+  "pyproject.toml",
+  "uv.lock",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+run = "uv run --frozen pytest tests"

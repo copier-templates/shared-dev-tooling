@@ -1,3 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 # UV Tasks
 ["uv:install"]
 description = "Install development dependencies"
@@ -5,55 +6,38 @@ tags = [
   "setup",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv install as pyproject.toml is absent"
-  exit 0
-fi
-uv sync --all-groups
-"""
+skip_if = "! test -f pyproject.toml"
+lock = "uv"
+run = "uv sync --locked --all-groups"
 
 ["uv:upgrade"]
 description = "Upgrade development dependencies"
 tags = [
-  "maintenance",
+  "deps",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv upgrade as pyproject.toml is absent"
-  exit 0
-fi
-uv sync --all-groups --upgrade
-"""
+skip_if = "! test -f pyproject.toml"
+lock = "uv"
+run = "uv sync --all-groups --upgrade"
 
 ["uv:audit"]
 description = "Audit locked dependencies for known vulnerabilities"
 tags = [
-  "lint",
+  "audit",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv audit as pyproject.toml is absent"
-  exit 0
-fi
-uv audit --locked --preview-features audit-command
-"""
+skip_if = "! test -f pyproject.toml || ! test -f uv.lock"
+run = "uv audit --locked --preview-features audit-command"
 
 ["uv:lock"]
 description = "Update lockfile without syncing environment"
 tags = [
-  "maintenance",
+  "deps",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv lock as pyproject.toml is absent"
-  exit 0
-fi
-uv lock
-"""
+skip_if = "! test -f pyproject.toml"
+lock = "uv"
+run = "uv lock"
 
 ["uv:lock:check"]
 description = "Check lockfile is up-to-date (check-only)"
@@ -61,58 +45,56 @@ tags = [
   "lint",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv lock check as pyproject.toml is absent"
-  exit 0
-fi
-uv lock --check
-"""
+skip_if = "! test -f pyproject.toml"
+run = "uv lock --check"
 
 ["uv:sync:check"]
 description = "Check environment is synchronized with lockfile (check-only)"
 tags = [
-  "lint",
+  "setup",
+  "check",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv sync check as pyproject.toml is absent"
-  exit 0
-fi
-uv sync --locked --check
-"""
+skip_if = "! test -f pyproject.toml"
+wait_for = [
+  "uv:install",
+]
+run = "uv sync --locked --check --all-groups"
 
 ["uv:tree"]
 description = "Display project dependency tree"
 tags = [
-  "maintenance",
+  "info",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping uv tree as pyproject.toml is absent"
-  exit 0
-fi
-uv tree
-"""
+skip_if = "! test -f pyproject.toml"
+run = "uv tree"
 
 ["uv:cache:prune"]
 description = "Prune dangling uv cache entries"
 tags = [
-  "maintenance",
+  "clean",
 ]
 run = "uv cache prune"
 
 ["uv:clean"]
 description = "Clean build and cache artifacts"
 tags = [
-  "maintenance",
+  "clean",
 ]
 quiet = true
 run = """
 rm -rf build/ dist/ .pytest_cache .ruff_cache htmlcov .coverage
-find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
-find . -type d -name '*.egg-info' -exec rm -rf {} + 2>/dev/null || true
-find . -type f -name '*.pyc' -delete 2>/dev/null || true
+find . -path './.git' -prune -o -path './node_modules' -prune -o -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+find . -path './.git' -prune -o -path './node_modules' -prune -o -type d -name '*.egg-info' -exec rm -rf {} + 2>/dev/null || true
+find . -path './.git' -prune -o -path './node_modules' -prune -o -type f -name '*.pyc' -delete 2>/dev/null || true
 """
+
+["uv:clean:venv"]
+description = "Remove the uv virtual environment (.venv/)"
+tags = [
+  "clean",
+]
+quiet = true
+skip_if = "! test -d .venv"
+run = "rm -rf .venv/"

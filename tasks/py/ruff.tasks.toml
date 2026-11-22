@@ -1,3 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise-task.json
 # Ruff Tasks (Python lint and format via uv)
 ["ruff:lint"]
 description = "Lint Python with Ruff (check-only)"
@@ -5,13 +6,18 @@ tags = [
   "lint",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping ruff check as pyproject.toml is absent"
-  exit 0
-fi
-uv run --frozen ruff check
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml"
+sources = [
+  "pyproject.toml",
+  "ruff.toml",
+  ".ruff.toml",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+run = "uv run --frozen ruff check"
 
 ["ruff:fix"]
 description = "Lint Python with Ruff and autofix"
@@ -19,13 +25,19 @@ tags = [
   "fix",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping ruff check as pyproject.toml is absent"
-  exit 0
-fi
-uv run --frozen ruff check --fix
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml"
+sources = [
+  "pyproject.toml",
+  "ruff.toml",
+  ".ruff.toml",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+lock = "py-write"
+run = "uv run --frozen ruff check --fix"
 
 ["ruff:fmt"]
 description = "Format Python code in place with Ruff"
@@ -33,13 +45,19 @@ tags = [
   "fmt",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping ruff format as pyproject.toml is absent"
-  exit 0
-fi
-uv run --frozen ruff format
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml"
+sources = [
+  "pyproject.toml",
+  "ruff.toml",
+  ".ruff.toml",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+lock = "py-write"
+run = "uv run --frozen ruff format"
 
 ["ruff:fmt:check"]
 description = "Check Python formatting with Ruff without changing files"
@@ -47,10 +65,22 @@ tags = [
   "lint",
 ]
 quiet = true
-run = """
-if [ ! -f pyproject.toml ]; then
-  echo "Skipping ruff format check as pyproject.toml is absent"
-  exit 0
-fi
-uv run --frozen ruff format --check
-"""
+raw_args = true
+skip_if = "! test -f pyproject.toml"
+sources = [
+  "pyproject.toml",
+  "ruff.toml",
+  ".ruff.toml",
+  "**/*.py",
+]
+wait_for = [
+  { task = "uv:install", optional = true },
+]
+run = "uv run --frozen ruff format --check"
+
+["ruff:validate"]
+description = "Lint and format-check Python with Ruff (ruff:lint + ruff:fmt:check)"
+depends = [
+  "ruff:lint",
+  "ruff:fmt:check",
+]
