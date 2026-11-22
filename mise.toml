@@ -21,3 +21,34 @@ shfmt = "3.14"
 jactionlint = "2.6"
 bun = "1.4"
 gh = "2"
+
+[hooks]
+enter = """
+ver="1"
+if [ "$(git config --local --get mise.gitDefaultsVersion 2>/dev/null)" != "$ver" ]; then
+top=$(git rev-parse --show-toplevel)
+  # Skip bulk reformatting commits in git blame
+  if [ -f "$top/.git-blame-ignore-revs" ]; then
+    git config --local --get blame.ignoreRevsFile >/dev/null 2>&1 || git config --local blame.ignoreRevsFile .git-blame-ignore-revs
+  fi
+  # Clearer diffs for moved code blocks
+  git config --local --get diff.algorithm >/dev/null 2>&1 || git config --local diff.algorithm histogram
+  # Show common ancestor in conflict markers
+  git config --local --get merge.conflictstyle >/dev/null 2>&1 || git config --local merge.conflictstyle zdiff3
+  # Remember resolved conflicts for reuse
+  git config --local --get rerere.enabled >/dev/null 2>&1 || git config --local rerere.enabled true
+  # Auto-stage reused conflict resolutions
+  git config --local --get rerere.autoUpdate >/dev/null 2>&1 || git config --local rerere.autoUpdate true
+  # Prune deleted remote branches on fetch
+  git config --local --get fetch.prune >/dev/null 2>&1 || git config --local fetch.prune true
+  # Set upstream on first push automatically
+  git config --local --get push.autoSetupRemote >/dev/null 2>&1 || git config --local push.autoSetupRemote true
+  # Replay local commits on pull for linear history
+  git config --local --get pull.rebase >/dev/null 2>&1 || git config --local pull.rebase true
+  # Show diff in commit message editor
+  git config --local --get commit.verbose >/dev/null 2>&1 || git config --local commit.verbose true
+  # Auto column layout for branch/tag listings
+  git config --local --get column.ui >/dev/null 2>&1 || git config --local column.ui auto
+  git config --local mise.gitDefaultsVersion "$ver"
+fi
+"""
