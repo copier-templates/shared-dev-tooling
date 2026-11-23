@@ -25,6 +25,7 @@
   entry: mise run taplo:fmt
   language: system
   types: [toml]
+  exclude: (^|/)mise(\..+)?\.toml$|^tasks/.*\.tasks\.toml$
 
 - id: taplo-lint
   name: taplo lint
@@ -32,6 +33,7 @@
   entry: mise run taplo:lint
   language: system
   types: [toml]
+  exclude: (^|/)mise(\..+)?\.toml$|^tasks/.*\.tasks\.toml$
 
 - id: shellcheck-lint
   name: shellcheck

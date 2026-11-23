@@ -35,9 +35,9 @@ tasks/<category>/<tool>.tasks.toml   # e.g. tasks/toml/taplo.tasks.toml, tasks/p
 
 ## Task definitions
 
-- Name tasks `<tool>:<verb>`, with further `:` segments for sub-verbs (`taplo:lint`, `mise:lock:check`). Exception: `tasks/core/gates.tasks.toml` defines bare gates (`lint`, `fmt`, `fix`, `test`, `audit`, `setup`, `ci`).
+- Name tasks `<tool>:<verb>`, with further `:` segments for sub-verbs (`taplo:lint`, `mise:lock:check`).
 - Every task file starts with `#:schema https://mise.jdx.dev/schema/mise-task.json` for IDE completion. Schema validation is enforced by `mise tasks validate` (strict unknown-field rejection), not `taplo lint` — taplo 0.10 cannot enforce this schema's `unevaluatedProperties`, and `.taplo.toml` excludes task files anyway.
-- Every task has a `description` and at least one tag. Core gates are `lint`, `fmt`, `fix`, `test`, `audit`, `setup` (plus `ci` entry point, which runs `lint` + `test` and is not a tag); lifecycle tags are `build`, `dev`, `clean`, `deps`, `info`, `ops`, `docs`, `changelog`, `check`, `hooks`, `release`. See [Task tags](../../README.md#task-tags) for listing and running by tag. Grouping tasks that only `depends` on other tagged tasks (e.g. `shell:validate`, `ruff:validate`) omit tags so `--tag` runs don't duplicate.
+- Every task has a `description` and at least one tag. Core gates are `lint`, `fmt`, `fix`, `test`, `audit`, `setup`; lifecycle tags are `build`, `dev`, `clean`, `deps`, `info`, `ops`, `docs`, `changelog`, `check`, `hooks`, `release`. See [Task tags](../../README.md#task-tags) for listing and running by tag. Grouping tasks that only `depends` on other tagged tasks (e.g. `shell:validate`, `ruff:validate`) omit tags so `--tag` runs don't duplicate.
   - `lint`: static checks only (no network, no env-sync). Audits go to `audit`, hook runners to `hooks`, env-sync to `setup`+`check`.
   - `setup`: one-time local env setup only. Dev servers go to `dev`, remote mutations to `ops`.
   - No `maintenance`: use `build`, `dev`, `clean`, `deps`, `info`.

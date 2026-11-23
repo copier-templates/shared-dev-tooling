@@ -25,6 +25,11 @@ description = "Validate all mise task definitions"
 tags = [
   "lint",
 ]
+sources = [
+  "mise.toml",
+  "mise.*.toml",
+  "tasks/**/*.tasks.toml",
+]
 run = "mise tasks validate"
 
 ["mise:install"]

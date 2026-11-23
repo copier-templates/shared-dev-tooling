@@ -1,4 +1,7 @@
 #:schema https://mise.jdx.dev/schema/mise-task.json
+# Scope mirrors .taplo.toml: task files and mise configs are owned by
+# `mise fmt` / `mise tasks validate`, not taplo. The `!` sources below keep
+# `mise run taplo:* --affected` from false-triggering on those files.
 ["taplo:lint"]
 description = "Lint TOML documents with taplo"
 tags = [
@@ -7,6 +10,9 @@ tags = [
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
+  "!tasks/**/*.tasks.toml",
+  "!mise.toml",
+  "!mise.*.toml",
   "taplo.toml",
   ".taplo.toml",
 ]
@@ -20,6 +26,9 @@ tags = [
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
+  "!tasks/**/*.tasks.toml",
+  "!mise.toml",
+  "!mise.*.toml",
   "taplo.toml",
   ".taplo.toml",
 ]
@@ -33,6 +42,9 @@ tags = [
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
+  "!tasks/**/*.tasks.toml",
+  "!mise.toml",
+  "!mise.*.toml",
   "taplo.toml",
   ".taplo.toml",
 ]
