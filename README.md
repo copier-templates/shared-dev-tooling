@@ -18,7 +18,7 @@ This repo ships workflows only: task and hook definitions. It never ships projec
 
 ```text
 .pre-commit-hooks.yaml               # prek hook manifest
-tasks/<category>/<tool>.tasks.toml   # shared mise tasks, named <tool>:<verb>
+tasks/<category>/<tool>.tasks.toml   # shared mise tasks, named <tool>:<verb> (except tasks/core/gates.tasks.toml, which defines bare lint/fmt/fix/test/audit/setup/ci gates)
 tasks/<category>/<name>.sh           # shared file tasks, e.g. release:cut
 docs/guidelines/                     # contributor guidelines (also rendered to the docs site)
 tasks/docs/starlight.tasks.toml      # shared docs site tasks (docs:*), powered by Astro/Starlight
@@ -94,7 +94,7 @@ Notes:
 
 ## Task tags
 
-Every task has at least one tag: `lint`, `fmt`, `fix`, `test`, `setup`, `release`, `maintenance`.
+Every task has at least one tag, except grouping tasks that only `depends` on other tagged tasks (e.g. `shell:validate`). Core gates: `lint`, `fmt`, `fix`, `test`, `audit`, `setup`, plus `ci` entry point (runs `lint` + `test`, not a tag). Lifecycle: `build`, `dev`, `clean`, `deps`, `info`, `ops`, `docs`, `changelog`, `check`, `hooks`, `release` (`maintenance` is split into `build`/`dev`/`clean`/`deps`/`info`).
 
 List all tags (sorted, unique):
 

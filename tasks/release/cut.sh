@@ -2,7 +2,6 @@
 #MISE description="Pick a version with gum, regenerate CHANGELOG.md, commit, tag and push from main"
 #MISE tags=["release"]
 #MISE interactive=true
-#MISE depends=[{ tag = "lint", optional = true }, { tag = "test", optional = true }]
 #USAGE flag "-u --allow-unsynced" help="Release even if main differs from origin/main"
 # Cuts a release from main: choose a bump with gum, regenerate CHANGELOG.md with
 # git-cliff, commit it as chore(release), tag, and optionally push.
