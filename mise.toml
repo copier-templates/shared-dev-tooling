@@ -21,17 +21,19 @@ bun = "1.4"
 gh = "2"
 
 [tasks."gate:all"]
-description = "Run every gate"
+description = "Run every gate (setup, writers, checks in parallel, clean, ci)"
 alias = "all"
-depends = [
-  "gate:setup",
-  "gate:lint",
-  "gate:fmt",
-  "gate:fix",
-  "gate:test",
-  "gate:audit",
-  "gate:clean",
-  "gate:ci",
+run = [
+  { task = "gate:setup" },
+  { task = "gate:fmt" },
+  { task = "gate:fix" },
+  { tasks = [
+    "gate:lint",
+    "gate:test",
+    "gate:audit",
+  ] },
+  { task = "gate:clean" },
+  { task = "gate:ci" },
 ]
 
 [hooks]
