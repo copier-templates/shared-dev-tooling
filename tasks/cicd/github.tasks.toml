@@ -1,5 +1,5 @@
 #:schema https://mise.jdx.dev/schema/mise-task.json
-["gh:lint"]
+["gh:workflows:lint"]
 description = "Lint GitHub Actions workflows with jactionlint"
 tags = [
   "lint",
