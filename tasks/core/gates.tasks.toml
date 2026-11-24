@@ -1,47 +1,57 @@
 #:schema https://mise.jdx.dev/schema/mise-task.json
 # Gate tasks: tag-based entry points for CI and local workflows.
 # Each gate depends on every loaded task with the matching tag.
+# The `gate:` prefix groups gates together in `mise tasks ls`
+# (bare `lint`/`test`/etc. would scatter and `test` collides with `test:*`).
 # optional = true is required in a shared library so partial consumer
 # includes (e.g. only tasks/py) don't error on missing tags.
-["lint"]
+# `alias` keeps the old bare names (`mise run lint`) working.
+["gate:lint"]
+alias = "lint"
 description = "Run every loaded lint task"
 depends = [
   { tag = "lint", optional = true },
 ]
 
-["fmt"]
+["gate:fmt"]
+alias = "fmt"
 description = "Run every loaded formatter task"
 depends = [
   { tag = "fmt", optional = true },
 ]
 
-["fix"]
+["gate:fix"]
+alias = "fix"
 description = "Run every loaded autofix task"
 depends = [
   { tag = "fix", optional = true },
 ]
 
-["test"]
+["gate:test"]
+alias = "test"
 description = "Run every loaded test task"
 depends = [
   { tag = "test", optional = true },
 ]
 
-["audit"]
+["gate:audit"]
+alias = "audit"
 description = "Run every loaded audit task"
 depends = [
   { tag = "audit", optional = true },
 ]
 
-["setup"]
+["gate:setup"]
+alias = "setup"
 description = "Run every loaded setup task"
 depends = [
   { tag = "setup", optional = true },
 ]
 
-["ci"]
+["gate:ci"]
+alias = "ci"
 description = "Run lint and test gates (CI entry point)"
 depends = [
-  "lint",
-  "test",
+  "gate:lint",
+  "gate:test",
 ]
