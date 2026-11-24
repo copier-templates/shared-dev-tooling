@@ -6,8 +6,15 @@ tags = [
   "setup",
 ]
 quiet = true
+usage = 'flag "-v --verbose" help="Show full install output"'
 skip_if = "! test -f package.json"
-run = "bun install --frozen-lockfile"
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec bun install --frozen-lockfile
+else
+  exec bun install --frozen-lockfile --silent
+fi
+"""
 
 ["bun:update"]
 description = "Update dependencies within their declared ranges (skips when package.json is absent)"

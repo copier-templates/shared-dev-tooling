@@ -18,7 +18,16 @@ description = "Verify mise.lock is up to date without changing it"
 tags = [
   "lint",
 ]
-run = "mise lock --check"
+quiet = true
+usage = 'flag "-v --verbose" help="Show full lock output"'
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec mise lock --check
+else
+  out=$(mise lock --check 2>&1) || { echo "$out"; exit 1; }
+  echo "$out" | head -n 1
+fi
+"""
 
 ["mise:tasks:validate"]
 description = "Validate all mise task definitions"
@@ -37,10 +46,18 @@ description = "Install all tools pinned in mise.toml and mise.lock"
 tags = [
   "setup",
 ]
+quiet = true
+usage = 'flag "-v --verbose" help="Show full tool output"'
 depends = [
-  "mise:lock:check",
+  { task = "mise:lock:check", args = ["{% if usage.verbose %}--verbose{% endif %}"] },
 ]
-run = "mise install --include-task-tools"
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec mise install --include-task-tools
+else
+  exec mise install --include-task-tools --quiet
+fi
+"""
 
 ["mise:outdated"]
 description = "List tools with newer versions than the locked ones"

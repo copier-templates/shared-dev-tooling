@@ -6,9 +6,16 @@ tags = [
   "setup",
 ]
 quiet = true
+usage = 'flag "-v --verbose" help="Show full sync output"'
 skip_if = "! test -f pyproject.toml"
 lock = "uv"
-run = "uv sync --locked --all-groups"
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec uv sync --locked --all-groups
+else
+  exec uv sync --locked --all-groups --quiet
+fi
+"""
 
 ["uv:upgrade"]
 description = "Upgrade development dependencies"
@@ -55,11 +62,18 @@ tags = [
   "check",
 ]
 quiet = true
+usage = 'flag "-v --verbose" help="Show full sync output"'
 skip_if = "! test -f pyproject.toml"
 wait_for = [
   "uv:install",
 ]
-run = "uv sync --locked --check --all-groups"
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec uv sync --locked --check --all-groups
+else
+  exec uv sync --locked --check --all-groups --quiet
+fi
+"""
 
 ["uv:tree"]
 description = "Display project dependency tree"

@@ -4,8 +4,16 @@ description = "Install prek git hooks"
 tags = [
   "setup",
 ]
+quiet = true
+usage = 'flag "-v --verbose" help="Show full hook output"'
 skip_if = "! git rev-parse --git-dir >/dev/null 2>&1 || ! test -f .pre-commit-config.yaml -o -f prek.toml"
-run = "prek install --prepare-hooks --force"
+run = """
+if [ "${usage_verbose:-false}" = "true" ]; then
+  exec prek install --prepare-hooks --force
+else
+  exec prek install --prepare-hooks --force --quiet
+fi
+"""
 
 ["prek:run"]
 description = "Run all hooks on all files"

@@ -44,8 +44,9 @@ depends = [
 ["gate:setup"]
 alias = "setup"
 description = "Run every loaded setup task"
+usage = 'flag "-v --verbose" help="Show full setup output"'
 depends = [
-  { tag = "setup", optional = true },
+  { tag = "setup", optional = true, args = ["{% if usage.verbose %}--verbose{% endif %}"] },
 ]
 
 ["gate:ci"]

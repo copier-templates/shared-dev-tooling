@@ -43,6 +43,7 @@ tasks/<category>/<tool>.tasks.toml   # e.g. tasks/toml/taplo.tasks.toml, tasks/p
   - No `maintenance`: use `build`, `dev`, `clean`, `deps`, `info`.
 - Prefer `skip_if` over `if [ ! -f ... ]` shell boilerplate (evaluates before confirm/lock, reports as skipped).
 - Tasks that wrap a tool with its own args set `raw_args = true` and use a single-line `run` so `-t/--help`/paths forward cleanly.
+- Setup tasks stay quiet by default and expose the previous output behind `usage = 'flag "-v --verbose" ...'`, forwarding it with `args = ["{% if usage.verbose %}--verbose{% endif %}"]` (see `mise:install` → `mise:lock:check`, `gate:setup` → tag `setup`).
 - Tasks that accept files take them as trailing arguments (`mise run taplo:lint a.toml b.toml` appends them to `run`), so prek hooks can pass filenames.
 - Add `sources` for `--affected` support; mutually-mutating file writers share `lock` (e.g. `py-write`, `uv`); order-only edges use `wait_for`, required edges use `depends` (with `{ task = ..., optional = true }` when the dep may not be included).
 - Tasks define workflows only. Project configuration (`prek.toml`, `.taplo.toml`, `cliff.toml`, linter configs) belongs to the consumer.
