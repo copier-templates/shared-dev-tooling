@@ -19,7 +19,7 @@ minimum_release_age = "7d"   # supply-chain cooldown for new tool releases
 
 Shared tasks never set the task-level `tools` property. The consumer's `[tools]` and `mise.lock` own every version.
 
-Why this matters: `mise outdated` and `mise upgrade --bump` only see `[tools]`, so versions declared on tasks drift silently. Keeping them in `[tools]` lets one command update everything. `mise run mise:bump` refreshes `mise.lock` within the declared ranges; `mise upgrade --bump` also raises the ranges in `[tools]`. When a task fails with `command not found` in a consumer, add the tool with `mise use <tool>@<version>`.
+Why this matters: `mise outdated` and `mise upgrade --bump` only see `[tools]`, so versions declared on tasks drift silently. Keeping them in `[tools]` lets one command update everything. `mise run mise:update` refreshes `mise.lock` within the declared ranges; `mise upgrade --bump` also raises the ranges in `[tools]`. When a task fails with `command not found` in a consumer, add the tool with `mise use <tool>@<version>`.
 
 This repo's `[tools]` pins exactly the tools its own tasks and hooks call.
 

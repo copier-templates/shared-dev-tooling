@@ -66,7 +66,7 @@ tags = [
 ]
 run = "mise outdated --no-global"
 
-["mise:bump"]
+["mise:update"]
 description = "Re-resolve tool requests to latest versions and refresh mise.lock"
 tags = [
   "deps",

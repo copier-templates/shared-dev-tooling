@@ -17,8 +17,8 @@ else
 fi
 """
 
-["uv:upgrade"]
-description = "Upgrade development dependencies"
+["uv:update"]
+description = "Update development dependencies"
 tags = [
   "deps",
 ]
@@ -59,7 +59,6 @@ run = "uv lock --check"
 description = "Check environment is synchronized with lockfile (check-only)"
 tags = [
   "setup",
-  "check",
 ]
 quiet = true
 usage = 'flag "-v --verbose" help="Show full sync output"'

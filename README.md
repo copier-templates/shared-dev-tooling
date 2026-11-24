@@ -86,7 +86,7 @@ hooks = [
 Notes:
 
 - Include granularity: `//tasks` (everything), `//tasks/<category>` (one category), or `//tasks/<category>/<tool>.tasks.toml` (one tool; the `.toml` extension is required). Globs only work for local paths.
-- Shared tasks do not declare tool versions. If a task fails with `command not found`, add the tool with `mise use <tool>@<version>`. Upgrade all tools at once with `mise run mise:bump` (within ranges) or `mise upgrade --bump` (raises ranges).
+- Shared tasks do not declare tool versions. If a task fails with `command not found`, add the tool with `mise use <tool>@<version>`. Upgrade all tools at once with `mise run mise:update` (within ranges) or `mise upgrade --bump` (raises ranges).
 - Without `?ref=` the default branch is used from cache. Run `mise run mise:cache:clear` to refetch the branch (wipes the entire mise cache, not just the git include).
 - To override a shared task, list a local directory after the remote entry.
 - Hooks can be tuned per consumer (`args`, `files`, `exclude`, `priority`, `stages`) next to their `id` without copying the definition.

@@ -17,7 +17,7 @@ Rules for Python 3.15+ with uv as package manager. Tasks live in `tasks/py/*.tas
 
 ## Install, update, audit
 
-- Install with `uv:install` (`uv sync --locked --all-groups`). Update within ranges with `uv:upgrade` (`uv sync --all-groups --upgrade`).
+- Install with `uv:install` (`uv sync --locked --all-groups`). Update within ranges with `uv:update` (`uv sync --all-groups --upgrade`).
 - Manage the lockfile with `uv:lock` (`uv lock`) and gate CI with `uv:lock:check` (`uv lock --check`) plus `uv:sync:check` (`uv sync --locked --check --all-groups`).
 - Audit with `uv:audit` (`uv audit --locked --preview-features audit-command`). Inspect with `uv:tree`, prune the cache with `uv:cache:prune`.
 
