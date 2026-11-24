@@ -94,7 +94,7 @@ Notes:
 
 ## Task tags
 
-Every task has at least one tag, except grouping tasks that only `depends` on other tagged tasks (e.g. `shell:validate`, `gate:lint`). Gates: `gate:lint`, `gate:fmt`, `gate:fix`, `gate:test`, `gate:audit`, `gate:setup` (run every task with the matching tag), plus `gate:ci` entry point (runs `gate:lint` + `gate:test`, not a tag). Bare `lint`/`fmt`/`fix`/`test`/`audit`/`setup`/`ci` remain as aliases. Lifecycle: `build`, `dev`, `clean`, `deps`, `info`, `ops`, `docs`, `changelog`, `check`, `hooks`, `release` (`maintenance` is split into `build`/`dev`/`clean`/`deps`/`info`).
+Every task has at least one tag, except grouping tasks that only `depends` on other tagged tasks (e.g. `shell:validate`, `gate:lint`). Gates: `gate:lint`, `gate:fmt`, `gate:fix` (includes `gate:fmt`), `gate:test`, `gate:audit`, `gate:setup`, `gate:clean` (run every task with the matching tag), plus `gate:ci` entry point (runs `gate:lint` + `gate:test`, not a tag). Bare `lint`/`fmt`/`fix`/`test`/`audit`/`setup`/`clean`/`ci` remain as aliases. Lifecycle: `build`, `dev`, `clean`, `deps`, `info`, `docs`, `changelog`, `hooks`, `release` (`maintenance` is split into `build`/`dev`/`clean`/`deps`/`info`).
 
 List all tags (sorted, unique):
 

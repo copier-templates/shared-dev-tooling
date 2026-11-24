@@ -22,9 +22,10 @@ depends = [
 
 ["gate:fix"]
 alias = "fix"
-description = "Run every loaded autofix task"
+description = "Run every loaded autofix and formatter task"
 depends = [
   { tag = "fix", optional = true },
+  "gate:fmt",
 ]
 
 ["gate:test"]
@@ -47,6 +48,13 @@ description = "Run every loaded setup task"
 usage = 'flag "-v --verbose" help="Show full setup output"'
 depends = [
   { tag = "setup", optional = true, args = ["{% if usage.verbose %}--verbose{% endif %}"] },
+]
+
+["gate:clean"]
+alias = "clean"
+description = "Run every loaded clean task"
+depends = [
+  { tag = "clean", optional = true },
 ]
 
 ["gate:ci"]

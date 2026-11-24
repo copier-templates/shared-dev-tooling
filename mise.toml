@@ -30,6 +30,7 @@ depends = [
   "gate:fix",
   "gate:test",
   "gate:audit",
+  "gate:clean",
   "gate:ci",
 ]
 
