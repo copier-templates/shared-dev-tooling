@@ -73,7 +73,7 @@ run = "rm -rf src/content/docs/ .astro/ dist/"
 ["docs:pages:enable"]
 description = "Enable GitHub Pages (GitHub Actions workflow source) via gh"
 tags = [
-  "ops",
+  "release",
   "docs",
 ]
 run = "repo=\"$(gh repo view --json nameWithOwner --jq .nameWithOwner)\"; gh api \"repos/${repo}/pages\" -f build_type=workflow --jq '.html_url' 2>/dev/null || gh api \"repos/${repo}/pages\" --method POST -f build_type=workflow --jq '.html_url'"
