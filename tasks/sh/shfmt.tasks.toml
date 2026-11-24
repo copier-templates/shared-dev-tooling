@@ -1,5 +1,5 @@
 #:schema https://mise.jdx.dev/schema/mise-task.json
-["shfmt:lint"]
+["shfmt:fmt:check"]
 description = "Check shell script formatting with shfmt without changing files"
 tags = [
   "lint",

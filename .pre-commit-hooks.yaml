@@ -51,7 +51,7 @@
 
 - id: shfmt-lint
   name: shfmt -d
-  description: Check shell script formatting (runs shfmt:lint)
-  entry: mise run shfmt:lint
+  description: Check shell script formatting (runs shfmt:fmt:check)
+  entry: mise run shfmt:fmt:check
   language: system
   types: [shell]

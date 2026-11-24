@@ -95,7 +95,7 @@ hooks = [
   { id = "shfmt-fmt", name = "[local] shfmt -w", entry = "mise run shfmt:fmt", language = "system", types = [
     "shell",
   ], priority = "fix-shell" },
-  { id = "shfmt-lint", name = "[local] shfmt -d", entry = "mise run shfmt:lint", language = "system", types = [
+  { id = "shfmt-lint", name = "[local] shfmt -d", entry = "mise run shfmt:fmt:check", language = "system", types = [
     "shell",
   ], priority = "checks" },
   { id = "taplo-fmt", name = "[local] taplo fmt", entry = "mise run taplo:fmt", language = "system", types = [
