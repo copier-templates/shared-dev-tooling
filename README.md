@@ -4,9 +4,9 @@
 [![prek](https://raw.githubusercontent.com/j178/prek/main/docs/assets/badge.svg)](https://github.com/j178/prek)
 [![License](https://img.shields.io/github/license/copier-templates/shared-dev-tooling)](LICENSE)
 
-</div>
-
 # Shared Dev Tooling
+
+</div>
 
 [mise](https://mise.jdx.dev/) tasks and [prek](https://prek.j178.dev) hooks shared across projects. mise installs every tool. prek hooks are thin wrappers that call the mise tasks (`mise run <task>`), so hooks, CI, and manual runs behave the same. Tasks and hooks are released together under one semver tag.
 

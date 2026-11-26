@@ -2,7 +2,7 @@
 # See https://prek.j178.dev for more information.
 #:schema https://www.schemastore.org/prek.json
 
-minimum_prek_version = "0.5.0"
+minimum_prek_version = "0.5.10"
 
 # Ensure Git shims exist for every stage this config uses: pre-commit fixers and
 # checks, the commit-msg conventional-commit check, and the pre-push
@@ -38,15 +38,6 @@ fix-shell = 5
 checks = 10
 
 [[repos]]
-repo = "https://github.com/jumanjihouse/pre-commit-hooks"
-rev = "3.0.0"
-hooks = [
-  { id = "forbid-binary", name = "[remote] Forbid binaries", priority = "checks" },
-  { id = "script-must-have-extension", name = "[remote] Non-executable shell script filename ends in .sh", priority = "checks" },
-  { id = "shellcheck", name = "[remote] Test shell scripts with shellcheck", priority = "checks" },
-]
-
-[[repos]]
 repo = "builtin"
 hooks = [
   { id = "check-added-large-files", name = "[builtin] check for added large files", priority = "checks" },
@@ -55,6 +46,7 @@ hooks = [
   { id = "check-toml", name = "[builtin] check toml", priority = "checks" },
   { id = "check-yaml", name = "[builtin] check yaml", priority = "checks", args = [
     "--allow-multiple-documents",
+    "--disallow-unknown-tags",
   ] },
   { id = "detect-private-key", name = "[builtin] detect private key", priority = "checks" },
   { id = "end-of-file-fixer", name = "[builtin] fix end of files", priority = "fix-eof" },
@@ -63,6 +55,15 @@ hooks = [
   { id = "trailing-whitespace", name = "[builtin] trim trailing whitespace", priority = "fix-whitespace", args = [
     "--markdown-linebreak-ext=md",
   ] },
+]
+
+[[repos]]
+repo = "https://github.com/jumanjihouse/pre-commit-hooks"
+rev = "3.0.0"
+hooks = [
+  { id = "forbid-binary", name = "[remote] Forbid binaries", priority = "checks" },
+  { id = "script-must-have-extension", name = "[remote] Non-executable shell script filename ends in .sh", priority = "checks" },
+  { id = "shellcheck", name = "[remote] Test shell scripts with shellcheck", priority = "checks" },
 ]
 
 [[repos]]
