@@ -7,6 +7,7 @@ description = "Lint TOML documents with taplo"
 tags = [
   "lint",
 ]
+quiet = true
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
@@ -16,13 +17,14 @@ sources = [
   "taplo.toml",
   ".taplo.toml",
 ]
-run = "taplo lint"
+run = "RUST_LOG=${RUST_LOG:-warn} taplo lint"
 
 ["taplo:fmt"]
 description = "Format TOML documents in place with taplo"
 tags = [
   "fmt",
 ]
+quiet = true
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
@@ -32,13 +34,14 @@ sources = [
   "taplo.toml",
   ".taplo.toml",
 ]
-run = "taplo fmt"
+run = "RUST_LOG=${RUST_LOG:-warn} taplo fmt"
 
 ["taplo:fmt:check"]
 description = "Check TOML formatting with taplo without changing files"
 tags = [
   "lint",
 ]
+quiet = true
 skip_if = "test -z \"$(git ls-files -- '*.toml')\""
 sources = [
   "**/*.toml",
@@ -48,4 +51,4 @@ sources = [
   "taplo.toml",
   ".taplo.toml",
 ]
-run = "taplo fmt --check"
+run = "RUST_LOG=${RUST_LOG:-warn} taplo fmt --check"
