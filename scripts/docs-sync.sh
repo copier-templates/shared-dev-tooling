@@ -70,6 +70,14 @@ strip_first_h1() {
   awk 'BEGIN { skipped = 0 } !skipped && /^# [^#]/ { skipped = 1; next } { print }'
 }
 
+yaml_quote() {
+  # Double-quote a scalar for YAML frontmatter (escape \ and ").
+  local s="$1"
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  printf '"%s"' "${s}"
+}
+
 sync_file() {
   local src="$1"
   local dst="$2"
@@ -85,7 +93,7 @@ sync_file() {
 
   mkdir -p "$(dirname "${dst}")"
   {
-    printf -- '---\ntitle: %s\ndescription: Shared Dev Tooling documentation.\n---\n\n' "${title}"
+    printf -- '---\ntitle: %s\ndescription: Shared Dev Tooling documentation.\n---\n\n' "$(yaml_quote "${title}")"
     rewrite_links "${depth}" <"${src}" | strip_first_h1
   } >"${dst}"
 }
