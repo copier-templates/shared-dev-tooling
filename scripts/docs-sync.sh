@@ -34,6 +34,12 @@ rewrite_links() {
     -e 's|^[[:space:]]*<source[^>]*srcset="(assets/logo-[^"]+)"[^>]*>[[:space:]]*$|![Shared Dev Tooling logo](../../../\1)|'
 }
 
+strip_first_h1() {
+  # Starlight renders frontmatter `title` as the page H1, so drop the
+  # source H1 (the same line `sync_file` uses for the title).
+  awk 'BEGIN { skipped = 0 } !skipped && /^# [^#]/ { skipped = 1; next } { print }'
+}
+
 sync_file() {
   local src="$1"
   local dst="$2"
@@ -49,7 +55,7 @@ sync_file() {
   mkdir -p "$(dirname "${dst}")"
   {
     printf -- '---\ntitle: %s\ndescription: Shared Dev Tooling documentation.\n---\n\n' "${title}"
-    rewrite_links <"${src}"
+    rewrite_links <"${src}" | strip_first_h1
   } >"${dst}"
 }
 
