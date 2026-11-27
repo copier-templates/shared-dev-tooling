@@ -28,19 +28,22 @@ mkdir -p "${OUT}/guidelines"
 # per route level.
 rewrite_links() {
   local depth="${1:-0}"
-  local up sib
+  local up sib img_up
   case "${depth}" in
   0)
     up="./"
     sib="./"
+    img_up="../../../"
     ;;
   1)
     up="../"
     sib="../"
+    img_up="../../../"
     ;;
   *)
     up="../../"
     sib="../"
+    img_up="../../../../"
     ;;
   esac
   if ((depth == 0)); then
@@ -58,7 +61,7 @@ rewrite_links() {
     -e 's|]\(LICENSE\)|](https://github.com/copier-templates/shared-dev-tooling/blob/main/LICENSE)|g' \
     -e '/^[[:space:]]*<\/?picture>[[:space:]]*$/d' \
     -e '/^[[:space:]]*<img[^>]*src="assets\/logo-[^"]+"[^>]*>[[:space:]]*$/d' \
-    -e 's|^[[:space:]]*<source[^>]*srcset="(assets/logo-[^"]+)"[^>]*>[[:space:]]*$|![Shared Dev Tooling logo](../../../\1)|' \
+    -e "s|^[[:space:]]*<source[^>]*srcset=\"(assets/logo-[^\"]+)\"[^>]*>[[:space:]]*\$|![Shared Dev Tooling logo](${img_up}\1)|" \
     -e "s|\]\( *\.\./\.\./README\.md(#[^)]*)?\)|](${up}\1)|g" \
     -e "s|\]\((\./)?([A-Za-z0-9_~-]+)\.md(#[^)]*)?\)|](${sib}\2/\3)|g" \
     -e "s|\]\((\./)?([A-Za-z0-9_~-]+/[A-Za-z0-9_~./-]+)\.md(#[^)]*)?\)|](${up}\2/\3)|g"
