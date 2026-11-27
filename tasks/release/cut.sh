@@ -91,10 +91,19 @@ git add CHANGELOG.md
 git commit -m "chore(release): bump version $version"
 git tag -a "$version" -m "$version"
 
-if gum confirm "Push main and tag $version to origin?"; then
-  git push --atomic origin main "refs/tags/$version"
+origin_url=$(git remote get-url origin 2>/dev/null || true)
+if [[ "$origin_url" == *github.com* ]]; then
+  push_cmd=(git push --atomic origin main "refs/tags/$version")
 else
-  printf 'Not pushed. Run: git push --atomic origin main refs/tags/%s\n' "$version"
+  # Non-GitHub servers may not support atomic pushes (the whole push
+  # fails after commit+tag are created), so push without --atomic.
+  push_cmd=(git push origin main "refs/tags/$version")
+fi
+
+if gum confirm "Push main and tag $version to origin?"; then
+  "${push_cmd[@]}"
+else
+  printf 'Not pushed. Run: %s\n' "${push_cmd[*]}"
   exit 0
 fi
 
@@ -102,7 +111,6 @@ if [[ "$no_github_release" == "true" ]]; then
   exit 0
 fi
 
-origin_url=$(git remote get-url origin 2>/dev/null || true)
 if [[ "$origin_url" != *github.com* ]]; then
   gum style --foreground 214 "non-GitHub remote, skipping GitHub Release" >&2
   exit 0
