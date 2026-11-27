@@ -71,7 +71,7 @@ fi
 if git rev-parse -q --verify "refs/tags/$version" >/dev/null; then
   die "tag $version already exists"
 fi
-if [[ "${version}" == "${last_remote:-}" && -n "${last_remote:-}" ]]; then
+if git ls-remote --tags --refs origin "refs/tags/${version}" | grep -q .; then
   die "tag $version already exists on origin"
 fi
 
