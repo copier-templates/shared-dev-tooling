@@ -88,7 +88,19 @@ tags = [
   "release",
   "docs",
 ]
-run = "repo=\"$(gh repo view --json nameWithOwner --jq .nameWithOwner)\"; gh api \"repos/${repo}/pages\" -f build_type=workflow --jq '.html_url' 2>/dev/null || gh api \"repos/${repo}/pages\" --method POST -f build_type=workflow --jq '.html_url'"
+run = """
+repo="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+err="$(mktemp)"
+if out=$(gh api "repos/${repo}/pages" --jq '.html_url' 2>"${err}"); then
+  printf '%s\\n' "${out}"
+elif grep -q -i -e 'not found' -e '404' "${err}"; then
+  gh api "repos/${repo}/pages" --method POST -f build_type=workflow --jq '.html_url'
+else
+  cat "${err}" >&2
+  exit 1
+fi
+rm -f "${err}"
+"""
 
 ["docs:deploy"]
 description = "Trigger the docs GitHub Pages workflow on main via gh"
