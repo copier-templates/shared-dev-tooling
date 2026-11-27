@@ -32,8 +32,8 @@ Rules for this repo's Starlight docs site. The site renders `docs/`, `README.md`
 
 ## Theming
 
-- Dark and light themes ship via the `starlight-theme-rose-pine` plugin (`astro.config.mjs`), with local tweaks in `src/styles/custom.css` (content width, badge rows, mermaid). Do not set `--sl-color-accent-*` in `custom.css` unlayered — it would override the plugin's `rose-pine` cascade layer.
-- The homepage hero is frontmatter, not content. Starlight centers it; do not add CSS that centers content headings or the README logo.
+- Dark and light themes ship via the `starlight-theme-rose-pine` plugin (`astro.config.mjs`), with local tweaks in `src/styles/custom.css` (content width, badge rows, mermaid). Do not set `--sl-color-accent-*` in `custom.css` unlayered. It would override the plugin's `rose-pine` cascade layer.
+- The homepage hero lives in frontmatter. Starlight centers it; do not add CSS that centers content headings or the README logo.
 - The header switcher is a one-click sun/moon button, not Starlight's Dark/Light/Auto select. It is the `ThemeSelect` override in `src/components/ThemeToggle.astro`. It flips `document.documentElement.dataset.theme` and stores the explicit choice in the same `starlight-theme` localStorage key Starlight uses. It follows system changes until the first click.
 - To add a theme: copy `src/styles/themes/_example.css` to `<name>.css` and set `:root[data-theme='<name>']` vars. Append to `customCss` in `astro.config.mjs`, then extend the toggle (or restore the select / use a community theme plugin) so the new theme is reachable.
 

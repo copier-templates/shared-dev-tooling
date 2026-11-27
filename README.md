@@ -10,7 +10,7 @@
 
 # Shared Dev Tooling
 
-**Shared mise tasks and prek hooks, released as one semver tag.**
+Shared mise tasks and prek hooks, released as one semver tag.
 
 <!-- docs-site-hero:end -->
 
@@ -157,7 +157,7 @@ Every task has at least one tag, except grouping tasks that only `depends` on ot
 | `gate:audit` | `audit` | |
 | `gate:setup` | `setup` | |
 | `gate:clean` | `clean` | |
-| `gate:ci` | — | entry point: `gate:lint` + `gate:test`, not a tag |
+| `gate:ci` | none | entry point: `gate:lint` + `gate:test`, not a tag |
 
 Bare `lint`/`fmt`/`fix`/`test`/`audit`/`setup`/`clean`/`ci` remain as aliases. Lifecycle tags: `build`, `dev`, `clean`, `deps`, `info`, `docs`, `changelog`, `hooks`, `release` (`maintenance` is split into `build`/`dev`/`clean`/`deps`/`info`).
 
