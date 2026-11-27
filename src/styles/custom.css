@@ -17,6 +17,12 @@
   vertical-align: middle;
 }
 
+/* Page title (Starlight renders frontmatter `title` as `h1#_top` above the
+ * content): center it to match the centered README hero (logos + badges). */
+#_top {
+  text-align: center;
+}
+
 /* README hero logo and centered heading: size, center, and follow Starlight's data-theme toggle. */
 .sl-markdown-content [align='center'] .sl-heading-wrapper {
   justify-content: center;
