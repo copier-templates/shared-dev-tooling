@@ -5,19 +5,18 @@
 minimum_prek_version = "0.5.10"
 
 # Ensure Git shims exist for every stage this config uses: pre-commit fixers and
-# checks, the commit-msg conventional-commit check, and the pre-push
-# version-tag gate. Without this, `prek install` only installs the pre-commit
-# shim and stage-specific hooks never fire.
+# checks, and the commit-msg conventional-commit check. Without this,
+# `prek install` only installs the pre-commit shim and the commit-msg hook
+# never fires.
 default_install_hook_types = [
   "commit-msg",
   "pre-commit",
   "pre-push",
 ]
 
-# Hooks without an explicit `stages` list run on every installed shim
-# (pre-commit *and* commit-msg on every commit, plus pre-push on every push).
-# Pin the default to pre-commit so each hook runs once; stage-specific hooks
-# (conventional-pre-commit, check-version-tag) declare their own stages.
+# Hooks without an explicit `stages` list run on every installed shim, so pin
+# the default to pre-commit to keep each hook to one run per commit.
+# Stage-specific hooks (conventional-pre-commit) declare their own stages.
 default_stages = [
   "pre-commit",
 ]
