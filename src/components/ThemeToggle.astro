@@ -98,16 +98,24 @@
   }
 
   // Follow system changes until the user picks an explicit theme.
-  matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-    if (!loadStored()) {
-      document.documentElement.dataset.theme = e.matches ? 'light' : 'dark';
-    }
-  });
+  // Guarded: Starlight client-side navigation re-executes this script on
+  // every page, which would otherwise stack a duplicate listener per visit.
+  const themeFlags = globalThis as unknown as Record<string, boolean | undefined>;
+  if (!themeFlags.__starlightThemeMediaBound) {
+    themeFlags.__starlightThemeMediaBound = true;
+    matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+      if (!loadStored()) {
+        document.documentElement.dataset.theme = e.matches ? 'light' : 'dark';
+      }
+    });
+  }
 
   class StarlightThemeToggle extends HTMLElement {
-    constructor() {
-      super();
-      this.querySelector('button')?.addEventListener('click', () => {
+    _button: HTMLButtonElement | null | undefined;
+    _onClick: (() => void) | undefined;
+    connectedCallback() {
+      const button = this.querySelector('button');
+      const onClick = () => {
         const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
         document.documentElement.dataset.theme = next;
         try {
@@ -115,7 +123,19 @@
         } catch {
           // Storage unavailable (e.g. private mode): theme still flips for this page.
         }
-      });
+      };
+      button?.addEventListener('click', onClick);
+      this._button = button;
+      this._onClick = onClick;
+    }
+    disconnectedCallback() {
+      const button = this._button;
+      const onClick = this._onClick;
+      if (button && onClick) {
+        button.removeEventListener('click', onClick);
+      }
+      this._button = undefined;
+      this._onClick = undefined;
     }
   }
 
