@@ -58,14 +58,11 @@ run = "uv lock --check"
 ["uv:sync:check"]
 description = "Check environment is synchronized with lockfile (check-only)"
 tags = [
-  "setup",
+  "lint",
 ]
 quiet = true
 usage = 'flag "-v --verbose" help="Show full sync output"'
 skip_if = "! test -f pyproject.toml"
-wait_for = [
-  "uv:install",
-]
 run = """
 if [ "${usage_verbose:-false}" = "true" ]; then
   exec uv sync --locked --check --all-groups
