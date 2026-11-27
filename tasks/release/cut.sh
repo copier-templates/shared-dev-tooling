@@ -39,25 +39,30 @@ elif ((ahead > 0)); then
 fi
 
 last_local=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | sed -n '1p')
-last_remote=$(git ls-remote --tags --refs origin | sed 's#.*refs/tags/##' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t . -k 1,1n -k 2,2n -k 3,3n | tail -n 1)
+last_remote=$(git ls-remote --tags --refs origin | sed 's#.*refs/tags/##' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t . -k 1,1n -k 2,2n -k 3,3n | tail -n 1 || true)
 gum style --border rounded --border-foreground 39 --padding "0 1" --margin "1 0" \
   "$(printf 'Last tag (local):  %s\nLast tag (remote): %s\nmain (local):      %s\nmain (remote):     %s\nDrift:             %s ahead, %s behind origin/main' \
     "${last_local:-none}" "${last_remote:-none}" "$(git rev-parse --short HEAD)" "$(git rev-parse --short origin/main)" "$ahead" "$behind")"
-kind=$(gum choose --header "Bump which part?" patch minor major custom)
+kind=$(gum choose --header "Bump which part?" patch minor major custom) || die "release cancelled"
+[[ -n "${kind:-}" ]] || die "release cancelled"
 
 bump() {
+  local base="${last_local:-0.0.0}"
+  [[ "${base}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "cannot bump from non-semver tag: ${base}"
   local major minor patch
-  IFS=. read -r major minor patch <<<"${last_local:-0.0.0}"
+  IFS=. read -r major minor patch <<<"${base}"
   case "$1" in
   major) major=$((major + 1)) minor=0 patch=0 ;;
   minor) minor=$((minor + 1)) patch=0 ;;
   patch) patch=$((patch + 1)) ;;
+  *) die "release cancelled" ;;
   esac
   printf '%s.%s.%s\n' "$major" "$minor" "$patch"
 }
 
 if [[ "$kind" == "custom" ]]; then
-  version=$(gum input --placeholder "X.Y.Z")
+  version=$(gum input --placeholder "X.Y.Z") || die "release cancelled"
+  [[ -n "${version:-}" ]] || die "release cancelled"
 else
   version=$(bump "$kind")
 fi
@@ -65,6 +70,9 @@ fi
 [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "invalid version: $version"
 if git rev-parse -q --verify "refs/tags/$version" >/dev/null; then
   die "tag $version already exists"
+fi
+if [[ "${version}" == "${last_remote:-}" && -n "${last_remote:-}" ]]; then
+  die "tag $version already exists on origin"
 fi
 
 git-cliff --tag "$version" -o CHANGELOG.md
