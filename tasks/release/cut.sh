@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-#MISE description="Pick a version with gum, regenerate CHANGELOG.md, commit, tag and push from main"
+#MISE description="Pick a version with gum, regenerate CHANGELOG.md, commit, tag, push and optionally publish a GitHub Release from main"
 #MISE tags=["release"]
 #MISE interactive=true
 #USAGE flag "-u --allow-unsynced" help="Release even if main is behind origin/main"
+#USAGE flag "-N --no-github-release" help="Skip the GitHub Release step (also auto-skipped when origin is not on github.com)"
 # Cuts a release from main: choose a bump with gum, regenerate CHANGELOG.md with
-# git-cliff, commit it as chore(release), tag, and optionally push.
+# git-cliff, commit it as chore(release), tag, push, and optionally publish a
+# GitHub Release (GitHub remotes only).
 set -euo pipefail
 
 # Gate bash 5.1+. This check itself parses under bash 3.2; plain echo because die/gum are not set up yet.
@@ -15,6 +17,8 @@ fi
 
 # shellcheck disable=SC2154 # set by mise from the --allow-unsynced #USAGE flag
 allow_unsynced=${usage_allow_unsynced:-false}
+# shellcheck disable=SC2154 # set by mise from the --no-github-release #USAGE flag
+no_github_release=${usage_no_github_release:-false}
 
 die() {
   gum style --foreground 196 "error: $*" >&2
@@ -83,4 +87,30 @@ if gum confirm "Push main and tag $version to origin?"; then
   git push --atomic origin main "refs/tags/$version"
 else
   printf 'Not pushed. Run: git push --atomic origin main refs/tags/%s\n' "$version"
+  exit 0
 fi
+
+if [[ "$no_github_release" == "true" ]]; then
+  exit 0
+fi
+
+origin_url=$(git remote get-url origin 2>/dev/null || true)
+if [[ "$origin_url" != *github.com* ]]; then
+  gum style --foreground 214 "non-GitHub remote, skipping GitHub Release" >&2
+  exit 0
+fi
+
+if ! gum confirm "Create GitHub Release $version?"; then
+  printf 'Skipped GitHub Release. Run: gh release create %s --title %s --notes-file - --verify-tag <notes>\n' "$version" "$version"
+  exit 0
+fi
+
+command -v gh >/dev/null 2>&1 || die "gh CLI not found (run mise run gate:setup)"
+if gh release view "$version" >/dev/null 2>&1; then
+  die "GitHub Release $version already exists"
+fi
+
+notes=$(awk -v header="## [$version]" 'index($0, header) == 1 { found=1; next } found && /^## / { exit } found' CHANGELOG.md)
+[[ -n "${notes:-}" ]] || die "no CHANGELOG.md entry found for $version"
+
+printf '%s\n' "$notes" | gh release create "$version" --title "$version" --notes-file - --verify-tag
