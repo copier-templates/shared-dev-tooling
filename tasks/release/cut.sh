@@ -29,7 +29,10 @@ die() {
 branch=$(git branch --show-current)
 [[ "$branch" == "main" ]] || die "release must run from main (current: ${branch:-detached HEAD})"
 [[ -z "$(git status --porcelain)" ]] || die "working tree is not clean"
-git fetch --quiet --tags origin main
+fetch_out=$(git fetch --tags origin main 2>&1) || {
+  printf '%s\n' "$fetch_out" >&2
+  die "fetch from origin failed (if a tag 'would clobber', local and remote tags diverged: compare 'git show-ref --tags' with 'git ls-remote --tags origin', sync them, then retry)"
+}
 read -r ahead behind <<<"$(git rev-list --left-right --count HEAD...origin/main)"
 if ((behind > 0)); then
   [[ "$allow_unsynced" == "true" ]] || die "main is $behind commit(s) behind origin/main (pull, or pass --allow-unsynced to override)"
