@@ -89,7 +89,7 @@ tags = [
   "info",
 ]
 quiet = true
-run = "mise tasks ls --json | tr '\\n' ' ' | grep --color=never -o '\"tags\": *\\[[^]]*\\]' | tr ',' '\\n' | grep --color=never -o '\"[^\"]*\"' | grep --color=never -v '\"tags\"' | tr -d '\"' | sort -u"
+run = "mise tasks ls --json | python3 -c \"import json,sys; print('\\n'.join(sorted({t for task in json.load(sys.stdin) for t in task.get('tags', [])})))\""
 
 ["mise:fmt"]
 description = "Format mise TOML configuration in place"
