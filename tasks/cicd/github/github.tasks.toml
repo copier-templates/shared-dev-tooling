@@ -6,7 +6,7 @@ tags = [
 ]
 quiet = true
 raw_args = true
-skip_if = "test -z \"$(find .github/workflows templates/.github/workflows -maxdepth 1 -name '*.yml' -o -name '*.yaml' 2>/dev/null | head -n 1)\""
+skip_if = "test -z \"$(find .github/workflows .github/actions templates/.github/workflows -maxdepth 2 \\( -name '*.yml' -o -name '*.yaml' \\) 2>/dev/null | head -n 1)\""
 sources = [
   ".github/workflows/**/*.{yml,yaml}",
   ".github/actions/**/*.{yml,yaml}",
@@ -16,7 +16,7 @@ sources = [
 run = """
 if [ $# -eq 0 ]; then
   shopt -s nullglob
-  set -- .github/workflows/*.{yml,yaml} templates/.github/workflows/*.{yml,yaml}
+  set -- .github/workflows/*.{yml,yaml} .github/actions/*/*.{yml,yaml} .github/actions/*.{yml,yaml} templates/.github/workflows/*.{yml,yaml}
   if [ $# -eq 0 ]; then
     exit 0
   fi
