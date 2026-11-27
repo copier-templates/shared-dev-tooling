@@ -28,7 +28,10 @@ rewrite_links() {
     -e 's|\(CHANGELOG\.md|\(changelog.md|g' \
     -e 's|\(GLOSSARY\.md|\(glossary.md|g' \
     -e 's|\(AGENTS\.md|\(agents.md|g' \
-    -e 's|]\(LICENSE\)|](https://github.com/copier-templates/shared-dev-tooling/blob/main/LICENSE)|g'
+    -e 's|]\(LICENSE\)|](https://github.com/copier-templates/shared-dev-tooling/blob/main/LICENSE)|g' \
+    -e '/^[[:space:]]*<\/?picture>[[:space:]]*$/d' \
+    -e '/^[[:space:]]*<img[^>]*src="assets\/logo-[^"]+"[^>]*>[[:space:]]*$/d' \
+    -e 's|^[[:space:]]*<source[^>]*srcset="(assets/logo-[^"]+)"[^>]*>[[:space:]]*$|![Shared Dev Tooling logo](../../../\1)|'
 }
 
 sync_file() {

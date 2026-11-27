@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Outer modular frame -->
+  <rect x="16" y="16" width="224" height="224" rx="44" fill="#F8FAFC" stroke="#0F172A" stroke-width="8"/>
+
+  <!-- Inter-task pipeline connectors -->
+  <path d="M 166 100 V 106 M 166 150 V 156" stroke="#64748B" stroke-width="6"/>
+
+  <!-- Git trunk and hook dispatch curves (prek -> mise tasks) -->
+  <path d="M 76 82 V 174" stroke="#0F172A" stroke-width="8"/>
+  <path d="M 90 68 H 104 C 114 68 116 78 126 78" stroke="#6D28D9" stroke-width="7"/>
+  <path d="M 76 92 C 76 116 96 128 126 128" stroke="#6D28D9" stroke-width="8"/>
+  <path d="M 126 178 C 102 178 96 188 90 188" stroke="#0D9488" stroke-width="7"/>
+
+  <!-- Top task block -->
+  <rect x="126" y="56" width="80" height="44" rx="12" fill="#FFFFFF" stroke="#0F172A" stroke-width="6"/>
+  <path d="M 142 72 L 152 78 L 142 84" stroke="#6D28D9" stroke-width="5"/>
+  <path d="M 162 84 H 188" stroke="#0F172A" stroke-width="5"/>
+
+  <!-- Middle active task block -->
+  <rect x="126" y="106" width="80" height="44" rx="12" fill="#EDE9FE" stroke="#6D28D9" stroke-width="6"/>
+  <path d="M 142 122 L 152 128 L 142 134" stroke="#6D28D9" stroke-width="5"/>
+  <path d="M 162 134 H 188" stroke="#4C1D95" stroke-width="5"/>
+
+  <!-- Bottom verification gate block -->
+  <rect x="126" y="156" width="80" height="44" rx="12" fill="#FFFFFF" stroke="#0F172A" stroke-width="6"/>
+  <path d="M 148 178 L 160 188 L 184 168" stroke="#0D9488" stroke-width="6"/>
+
+  <!-- Git commit and hook junction nodes -->
+  <circle cx="76" cy="68" r="14" fill="#FFFFFF" stroke="#0F172A" stroke-width="8"/>
+  <circle cx="76" cy="188" r="14" fill="#CCFBF1" stroke="#0D9488" stroke-width="8"/>
+  <circle cx="126" cy="128" r="5" fill="#6D28D9" stroke="#6D28D9" stroke-width="2"/>
+</svg>

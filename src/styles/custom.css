@@ -16,3 +16,19 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+/* README hero logo and centered heading: size, center, and follow Starlight's data-theme toggle. */
+.sl-markdown-content [align='center'] .sl-heading-wrapper {
+  justify-content: center;
+}
+
+.sl-markdown-content img[src*='logo-'] {
+  width: 120px;
+  height: auto;
+  margin-inline: auto;
+}
+
+:root[data-theme='light'] .sl-markdown-content img[src*='logo-dark'],
+:root:not([data-theme='light']) .sl-markdown-content img[src*='logo-light'] {
+  display: none;
+}

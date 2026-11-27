@@ -9,6 +9,10 @@ export default defineConfig({
     starlight({
       title: 'Shared Dev Tooling',
       description: 'Shared mise tasks and prek hooks.',
+      logo: {
+        light: './assets/logo-light.svg',
+        dark: './assets/logo-dark.svg',
+      },
       plugins: [starlightThemeRosePine()],
       social: [
         {

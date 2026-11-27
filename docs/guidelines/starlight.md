@@ -5,7 +5,7 @@ Rules for this repo's Starlight docs site. The site renders `docs/`, `README.md`
 ## Source vs generated
 
 - Author in `docs/` and the repo-root Markdown files. Never edit `src/content/docs/`; it is generated and gitignored.
-- `scripts/docs-sync.sh` is the single source for the mapping: `README.md` → `index.md`, `AGENTS.md` → `agents.md`, `GLOSSARY.md` → `glossary.md`, `CHANGELOG.md` → `changelog.md`, `docs/guidelines/*.md` → `guidelines/*.md` (single level, non-recursive). It injects `title`/`description` frontmatter and rewrites `../../README.md` → `..`, `docs/guidelines/` → `guidelines/`, `CHANGELOG.md` → `changelog.md`, `GLOSSARY.md` → `glossary.md`, `AGENTS.md` → `agents.md`, and `LICENSE` → GitHub URL.
+- `scripts/docs-sync.sh` is the single source for the mapping: `README.md` → `index.md`, `AGENTS.md` → `agents.md`, `GLOSSARY.md` → `glossary.md`, `CHANGELOG.md` → `changelog.md`, `docs/guidelines/*.md` → `guidelines/*.md` (single level, non-recursive). It injects `title`/`description` frontmatter and rewrites `../../README.md` → `..`, `docs/guidelines/` → `guidelines/`, `CHANGELOG.md` → `changelog.md`, `GLOSSARY.md` → `glossary.md`, `AGENTS.md` → `agents.md`, `LICENSE` → GitHub URL, and the README `<picture>` logo block into Astro-bundled Markdown images.
 - Run `mise run docs:sync` directly or via `docs:dev` / `docs:check` / `docs:build` (they depend on it).
 
 ## Toolchain and tasks

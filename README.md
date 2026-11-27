@@ -1,10 +1,16 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/logo-light.svg">
+  <img alt="Shared Dev Tooling logo" src="assets/logo-light.svg" width="120">
+</picture>
+
+# Shared Dev Tooling
+
 [![mise](https://img.shields.io/badge/mise-enabled-purple)](https://mise.jdx.dev/)
 [![prek](https://raw.githubusercontent.com/j178/prek/main/docs/assets/badge.svg)](https://github.com/j178/prek)
 [![License](https://img.shields.io/github/license/copier-templates/shared-dev-tooling)](LICENSE)
-
-# Shared Dev Tooling
 
 </div>
 
