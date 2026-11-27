@@ -18,9 +18,12 @@ body = """
     {% for commit in entry.commits %}
         - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
             {% if commit.breaking %}[**breaking**] {% endif %}\
-            {{ commit.message | upper_first }}\
+            {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}/commit/{{ commit.id }}))\
     {% endfor %}
 {% endfor %}
+{% if version and previous.version %}\
+**Full Changelog**: https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}/compare/{{ previous.version }}...{{ version }}
+{% endif %}\
 """
 # Remove leading and trailing whitespaces from the changelog's body.
 trim = true
@@ -28,13 +31,19 @@ trim = true
 render_always = true
 # An array of regex based postprocessors to modify the changelog.
 postprocessors = [
-  # Replace the placeholder <REPO> with a URL.
-  #{ pattern = '<REPO>', replace = "https://github.com/orhun/git-cliff" },
+  # End the file with exactly one newline. git-cliff preserves the template's
+  # trailing blank lines, which makes prek's end-of-file-fixer rewrite it.
+  { pattern = "\\n+$", replace = "\n" },
 ]
 # render body even when there are no releases to process
 # render_always = true
 # output file path
 # output = "test.md"
+
+# Reference config: consumers copying this file must set their own owner/repo.
+[remote.github]
+owner = "copier-templates"
+repo = "shared-dev-tooling"
 
 [git]
 # Parse commits according to the conventional commits specification.
