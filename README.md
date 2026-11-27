@@ -10,6 +10,11 @@
 
 [![mise](https://img.shields.io/badge/mise-enabled-purple)](https://mise.jdx.dev/)
 [![prek](https://raw.githubusercontent.com/j178/prek/main/docs/assets/badge.svg)](https://github.com/j178/prek)
+[![bun](https://img.shields.io/badge/bun-black?logo=bun&logoColor=white)](https://bun.sh/)
+[![astro starlight](https://img.shields.io/badge/astro-starlight-ff5d01?logo=astro&logoColor=white)](https://starlight.astro.build/)
+[![git-cliff](https://img.shields.io/badge/git--cliff-changelog-2ea043?logo=git&logoColor=white)](https://git-cliff.org/)<br>
+[![Docs](https://github.com/copier-templates/shared-dev-tooling/actions/workflows/docs.yml/badge.svg)](https://copier-templates.github.io/shared-dev-tooling/)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
 [![License](https://img.shields.io/github/license/copier-templates/shared-dev-tooling)](LICENSE)
 
 </div>
