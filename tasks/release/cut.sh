@@ -2,7 +2,7 @@
 #MISE description="Pick a version with gum, regenerate CHANGELOG.md, commit, tag and push from main"
 #MISE tags=["release"]
 #MISE interactive=true
-#USAGE flag "-u --allow-unsynced" help="Release even if main differs from origin/main"
+#USAGE flag "-u --allow-unsynced" help="Release even if main is behind origin/main"
 # Cuts a release from main: choose a bump with gum, regenerate CHANGELOG.md with
 # git-cliff, commit it as chore(release), tag, and optionally push.
 set -euo pipefail
@@ -26,14 +26,16 @@ branch=$(git branch --show-current)
 [[ "$branch" == "main" ]] || die "release must run from main (current: ${branch:-detached HEAD})"
 [[ -z "$(git status --porcelain)" ]] || die "working tree is not clean"
 git fetch --quiet --tags origin main
-if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]]; then
-  [[ "$allow_unsynced" == "true" ]] || die "main is not in sync with origin/main (pass --allow-unsynced to override)"
-  gum style --foreground 214 "warning: releasing with main out of sync with origin/main" >&2
+read -r ahead behind <<<"$(git rev-list --left-right --count HEAD...origin/main)"
+if ((behind > 0)); then
+  [[ "$allow_unsynced" == "true" ]] || die "main is $behind commit(s) behind origin/main (pull, or pass --allow-unsynced to override)"
+  gum style --foreground 214 "warning: releasing with main $behind behind origin/main" >&2
+elif ((ahead > 0)); then
+  gum style --foreground 214 "warning: releasing with main $ahead ahead of origin/main" >&2
 fi
 
 last_local=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | sed -n '1p')
 last_remote=$(git ls-remote --tags --refs origin | sed 's#.*refs/tags/##' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t . -k 1,1n -k 2,2n -k 3,3n | tail -n 1)
-read -r ahead behind <<<"$(git rev-list --left-right --count HEAD...origin/main)"
 gum style --border rounded --border-foreground 39 --padding "0 1" --margin "1 0" \
   "$(printf 'Last tag (local):  %s\nLast tag (remote): %s\nmain (local):      %s\nmain (remote):     %s\nDrift:             %s ahead, %s behind origin/main' \
     "${last_local:-none}" "${last_remote:-none}" "$(git rev-parse --short HEAD)" "$(git rev-parse --short origin/main)" "$ahead" "$behind")"

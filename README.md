@@ -128,7 +128,7 @@ Follow the guidelines in [docs/guidelines/](docs/guidelines/): [mise](docs/guide
 
 ## Releasing
 
-Run `mise run release:cut` from `main` (add `-u` to release while `main` differs from `origin/main`). It picks a bump, regenerates [CHANGELOG.md](CHANGELOG.md), commits `chore(release): bump version <version>`, tags, and optionally pushes.
+Run `mise run release:cut` from `main` (add `-u` to release while `main` is behind `origin/main`; being ahead only warns). It picks a bump, regenerates [CHANGELOG.md](CHANGELOG.md), commits `chore(release): bump version <version>`, tags, and optionally pushes.
 
 ## Changelog
 
