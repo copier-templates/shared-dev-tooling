@@ -9,32 +9,31 @@
   --sl-content-width: 50rem;
 }
 
-/* Badge rows (e.g. the README shields) must stay on one line. Starlight
- * sets content images to `display: block`; linked images in a paragraph
- * are badges, so keep them inline. Real figures stay block-level. */
+/* Badge rows (e.g. the README shields, kept on the homepage below the
+ * Starlight hero) must stay on one line. Starlight sets content images to
+ * `display: block`; linked images in a paragraph are badges, so keep them
+ * inline. Real figures stay block-level. */
 .sl-markdown-content p > a > img {
   display: inline-block;
   vertical-align: middle;
 }
 
-/* Page title (Starlight renders frontmatter `title` as `h1#_top` above the
- * content): center it to match the centered README hero (logos + badges). */
-#_top {
-  text-align: center;
-}
-
-/* README hero logo and centered heading: size, center, and follow Starlight's data-theme toggle. */
-.sl-markdown-content [align='center'] .sl-heading-wrapper {
+/* Diagrams rendered client-side by src/components/Mermaid.astro. */
+.mermaid-diagram {
+  display: flex;
   justify-content: center;
+  margin-block: 1.5rem;
 }
 
-.sl-markdown-content img[src*='logo-'] {
-  width: 120px;
+.mermaid-diagram svg {
+  max-width: 100%;
   height: auto;
-  margin-inline: auto;
 }
 
-:root[data-theme='light'] .sl-markdown-content img[src*='logo-dark'],
-:root:not([data-theme='light']) .sl-markdown-content img[src*='logo-light'] {
-  display: none;
+.mermaid-diagram pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
 }

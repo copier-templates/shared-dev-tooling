@@ -16,7 +16,8 @@ Rules for the published hook manifest `.pre-commit-hooks.yaml` and this repo's o
 
 Every manifest hook is mirrored as a `repo = "local"` hook with the same `id`, `entry`, `language` and filters, so this repo runs its own hooks. Project-specific fields (`priority`, `stages`) live only there.
 
-Why this mirror exists: prek's only special `repo` values are `local`, `meta` and `builtin`. Any other `repo` is cloned at a fixed `rev`, so a repo cannot run its own working-tree manifest. Pointing at the GitHub URL tests the last published tag, not the change under review. When editing a hook, change the manifest and its mirror together and verify the manifest with `prek try-repo` (below).
+> [!IMPORTANT]
+> prek's only special `repo` values are `local`, `meta` and `builtin`. Any other `repo` is cloned at a fixed `rev`, so a repo cannot run its own working-tree manifest: pointing at the GitHub URL tests the last published tag, not the change under review. Change the manifest and its mirror together and verify the manifest with `prek try-repo` (below).
 
 ## Consumers
 

@@ -19,7 +19,10 @@ minimum_release_age = "7d"   # supply-chain cooldown for new tool releases
 
 Shared tasks never set the task-level `tools` property. The consumer's `[tools]` and `mise.lock` own every version.
 
-Why this matters: `mise outdated` and `mise upgrade --bump` only see `[tools]`, so versions declared on tasks drift silently. Keeping them in `[tools]` lets one command update everything. `mise run mise:update` refreshes `mise.lock` within the declared ranges; `mise upgrade --bump` also raises the ranges in `[tools]`. When a task fails with `command not found` in a consumer, add the tool with `mise use <tool>@<version>`.
+> [!WARNING]
+> `mise outdated` and `mise upgrade --bump` only see `[tools]`, so versions declared on tasks drift silently. Keep every version in `[tools]` so one command updates everything.
+
+`mise run mise:update` refreshes `mise.lock` within the declared ranges; `mise upgrade --bump` also raises the ranges in `[tools]`. When a task fails with `command not found` in a consumer, add the tool with `mise use <tool>@<version>`.
 
 This repo's `[tools]` pins exactly the tools its own tasks and hooks call.
 
@@ -58,7 +61,10 @@ Consumers list `git::` URLs in `task_config.includes`, pinned with `?ref=<tag>` 
 | `//tasks/py` | one category |
 | `//tasks/py/ruff.tasks.toml` | one tool (the `.toml` extension is required) |
 
-Globs work only for local paths. An unresolvable entry makes every mise command in the consumer fail. Check `mise tasks ls` after editing includes.
+Globs work only for local paths.
+
+> [!WARNING]
+> An unresolvable entry makes every mise command in the consumer fail. Check `mise tasks ls` after editing includes.
 
 ## File tasks
 

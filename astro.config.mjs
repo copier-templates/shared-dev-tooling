@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Shared Dev Tooling',
-      description: 'Shared mise tasks and prek hooks.',
+      description: 'Shared mise tasks and prek hooks, released as one semver tag.',
       logo: {
         light: './assets/logo-light.svg',
         dark: './assets/logo-dark.svg',
@@ -35,9 +35,13 @@ export default defineConfig({
           ],
         },
       ],
+      // Generated pages get an `editUrl`/`lastUpdated` from docs-sync.sh (the
+      // generated files are gitignored, so the source files are linked instead).
+      lastUpdated: true,
       customCss: ['./src/styles/custom.css'],
       components: {
         ThemeSelect: './src/components/ThemeToggle.astro',
+        Head: './src/components/Head.astro',
       },
     }),
   ],

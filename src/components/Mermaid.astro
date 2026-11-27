@@ -1,0 +1,80 @@
+---
+// Renders ```mermaid fenced blocks as diagrams in the browser. GitHub renders
+// the same blocks natively; Astro has no built-in mermaid renderer, and a
+// build-time plugin would need a headless browser, so this runs client-side.
+// The mermaid bundle is only imported on pages that contain a diagram.
+---
+
+<script>
+  const SELECTOR = 'pre[data-language="mermaid"]';
+  const diagrams: { wrapper: HTMLElement; source: string }[] = [];
+  let mermaidPromise: Promise<typeof import('mermaid').default> | undefined;
+  let renderIndex = 0;
+  let queue: Promise<void> = Promise.resolve();
+
+  function getMermaid() {
+    mermaidPromise ??= import('mermaid').then((module) => module.default);
+    return mermaidPromise;
+  }
+
+  // Expressive Code renders each source line as its own element, so
+  // `textContent` alone would lose the newlines mermaid needs.
+  function sourceOf(pre: HTMLElement) {
+    const lines = pre.querySelectorAll('.ec-line');
+    if (lines.length > 0) {
+      return Array.from(lines, (line) => line.textContent ?? '').join('\n');
+    }
+    return pre.textContent ?? '';
+  }
+
+  function themeName() {
+    return document.documentElement.dataset.theme === 'light' ? 'default' : 'dark';
+  }
+
+  async function renderDiagram(diagram: { wrapper: HTMLElement; source: string }) {
+    const mermaid = await getMermaid();
+    try {
+      const { svg } = await mermaid.render(`mermaid-${renderIndex++}`, diagram.source);
+      diagram.wrapper.innerHTML = svg;
+    } catch {
+      // Keep the source visible if the diagram is invalid.
+      const pre = document.createElement('pre');
+      pre.textContent = diagram.source;
+      diagram.wrapper.replaceChildren(pre);
+    }
+  }
+
+  async function renderAll() {
+    if (diagrams.length === 0) {
+      for (const pre of document.querySelectorAll<HTMLElement>(SELECTOR)) {
+        const figure = pre.closest('figure.expressive-code') ?? pre;
+        const source = sourceOf(pre);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-diagram';
+        figure.replaceWith(wrapper);
+        diagrams.push({ wrapper, source });
+      }
+    }
+    if (diagrams.length === 0) return;
+    const mermaid = await getMermaid();
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: themeName(),
+      fontFamily: 'inherit',
+    });
+    await Promise.all(diagrams.map((diagram) => renderDiagram(diagram)));
+  }
+
+  function scheduleRender() {
+    // Serialize renders: the theme toggle can flip while a render is running.
+    queue = queue.then(renderAll).catch(() => {});
+  }
+
+  scheduleRender();
+
+  new MutationObserver(scheduleRender).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+</script>

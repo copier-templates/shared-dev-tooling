@@ -1,0 +1,10 @@
+---
+// Starlight `Head` override: keep the default head tags and add the global
+// client-side mermaid renderer (see Mermaid.astro). Registered in
+// astro.config.mjs; see docs/guidelines/starlight.md.
+import DefaultHead from '@astrojs/starlight/components/Head.astro';
+import Mermaid from './Mermaid.astro';
+---
+
+<DefaultHead />
+<Mermaid />
