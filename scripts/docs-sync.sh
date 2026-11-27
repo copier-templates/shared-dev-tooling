@@ -21,9 +21,36 @@ SRC_DOCS="docs"
 rm -rf "${OUT}"
 mkdir -p "${OUT}/guidelines"
 
+# $1: route depth of the page (0 = site root index, 1 = agents/glossary/
+# changelog, 2 = guidelines/*). Starlight serves directory-style routes, so a
+# same-directory `sibling.md` link is `./sibling/` at the root but
+# `../sibling/` one level down; docs-root-relative targets need one `../`
+# per route level.
 rewrite_links() {
-  sed -E \
-    -e 's|\(\.\./\.\./README\.md|\(..|g' \
+  local depth="${1:-0}"
+  local up sib
+  case "${depth}" in
+  0)
+    up="./"
+    sib="./"
+    ;;
+  1)
+    up="../"
+    sib="../"
+    ;;
+  *)
+    up="../../"
+    sib="../"
+    ;;
+  esac
+  if ((depth == 0)); then
+    # Homepage only: the source links the docs/guidelines/ directory (repo
+    # tree on GitHub). The site has no directory pages, so point at the
+    # Contributing section, which enumerates every guideline with links.
+    sed -E -e 's|]\( *docs/guidelines/\)|](./#contributing)|g'
+  else
+    cat
+  fi | sed -E \
     -e 's|\(docs/guidelines/|\(guidelines/|g' \
     -e 's|\(CHANGELOG\.md|\(changelog.md|g' \
     -e 's|\(GLOSSARY\.md|\(glossary.md|g' \
@@ -31,7 +58,10 @@ rewrite_links() {
     -e 's|]\(LICENSE\)|](https://github.com/copier-templates/shared-dev-tooling/blob/main/LICENSE)|g' \
     -e '/^[[:space:]]*<\/?picture>[[:space:]]*$/d' \
     -e '/^[[:space:]]*<img[^>]*src="assets\/logo-[^"]+"[^>]*>[[:space:]]*$/d' \
-    -e 's|^[[:space:]]*<source[^>]*srcset="(assets/logo-[^"]+)"[^>]*>[[:space:]]*$|![Shared Dev Tooling logo](../../../\1)|'
+    -e 's|^[[:space:]]*<source[^>]*srcset="(assets/logo-[^"]+)"[^>]*>[[:space:]]*$|![Shared Dev Tooling logo](../../../\1)|' \
+    -e "s|\]\( *\.\./\.\./README\.md(#[^)]*)?\)|](${up}\1)|g" \
+    -e "s|\]\((\./)?([A-Za-z0-9_~-]+)\.md(#[^)]*)?\)|](${sib}\2/\3)|g" \
+    -e "s|\]\((\./)?([A-Za-z0-9_~-]+/[A-Za-z0-9_~./-]+)\.md(#[^)]*)?\)|](${up}\2/\3)|g"
 }
 
 strip_first_h1() {
@@ -44,6 +74,7 @@ sync_file() {
   local src="$1"
   local dst="$2"
   local fallback_title="$3"
+  local depth="${4:-0}"
   local title=""
 
   [[ -f "${src}" ]] || die "missing source ${src}"
@@ -55,19 +86,19 @@ sync_file() {
   mkdir -p "$(dirname "${dst}")"
   {
     printf -- '---\ntitle: %s\ndescription: Shared Dev Tooling documentation.\n---\n\n' "${title}"
-    rewrite_links <"${src}" | strip_first_h1
+    rewrite_links "${depth}" <"${src}" | strip_first_h1
   } >"${dst}"
 }
 
-sync_file "README.md" "${OUT}/index.md" "Shared Dev Tooling"
-[[ -f "AGENTS.md" ]] && sync_file "AGENTS.md" "${OUT}/agents.md" "Agents"
-[[ -f "GLOSSARY.md" ]] && sync_file "GLOSSARY.md" "${OUT}/glossary.md" "Glossary"
-[[ -f "CHANGELOG.md" ]] && sync_file "CHANGELOG.md" "${OUT}/changelog.md" "Changelog"
+sync_file "README.md" "${OUT}/index.md" "Shared Dev Tooling" 0
+[[ -f "AGENTS.md" ]] && sync_file "AGENTS.md" "${OUT}/agents.md" "Agents" 1
+[[ -f "GLOSSARY.md" ]] && sync_file "GLOSSARY.md" "${OUT}/glossary.md" "Glossary" 1
+[[ -f "CHANGELOG.md" ]] && sync_file "CHANGELOG.md" "${OUT}/changelog.md" "Changelog" 1
 
 shopt -s nullglob
 for src in "${SRC_DOCS}"/guidelines/*.md; do
   base=$(basename "${src}")
-  sync_file "${src}" "${OUT}/guidelines/${base}" "${base%.md}"
+  sync_file "${src}" "${OUT}/guidelines/${base}" "${base%.md}" 2
 done
 shopt -u nullglob
 

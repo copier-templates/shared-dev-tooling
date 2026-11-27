@@ -55,3 +55,11 @@
   entry: mise run shfmt:fmt:check
   language: system
   types: [shell]
+
+- id: docs-links
+  name: docs links
+  description: Check internal links in the built docs site (runs docs:links)
+  entry: mise run docs:links
+  language: system
+  pass_filenames: false
+  files: \.md$|^scripts/docs-sync\.sh$|^scripts/docs-check-links\.sh$|^astro\.config\.mjs$|^tasks/docs/

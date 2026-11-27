@@ -50,6 +50,18 @@ depends = [
 ]
 run = "bunx --bun astro build"
 
+["docs:links"]
+description = "Check internal links in the built Starlight site (runs scripts/docs-check-links.sh)"
+tags = [
+  "lint",
+  "docs",
+]
+skip_if = "! test -f scripts/docs-check-links.sh"
+depends = [
+  "docs:build",
+]
+run = "scripts/docs-check-links.sh"
+
 ["docs:preview"]
 description = "Preview the production build locally"
 tags = [
